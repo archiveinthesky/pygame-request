@@ -1,0 +1,11 @@
+backgrounds/textbar.png
+backgrounds/objectbar.png
+backgrounds/stage0/start-game-background/1.jpg
+backgrounds/stage0/backgroundintro.png
+backgrounds/stage0/blackscreen.png
+backgrounds/stage0/castlefartest1.jpg
+backgrounds/stage0/start-game-background/2.jpg
+backgrounds/stage0/candlehallway.jpg
+backgrounds/test1.jpg
+backgrounds/stage1/startescape1.png
+backgrounds/stage1/madamroom.jpg

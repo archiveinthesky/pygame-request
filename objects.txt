@@ -1,0 +1,15 @@
+objects/startgamev3.png
+objects/scroolmenu.png
+objects/check.png
+objects/darkbluecheckbox.png
+objects/blueleavegame.png
+objects/scene1/madamroomicon.png
+objects/scene1/woodendooricon.png
+objects/scene1/box.png
+objects/scene1/lockbox1madam.png
+objects/scene1/lockbox2madam.png
+objects/scene1/openbox1madam.png
+objects/scene1/openbox2madam.png
+objects/scene1/diary/redcover.png
+objects/scene1/diary/bluecover.png
+objects/scene1/diary/redopen.png
