@@ -337,17 +337,17 @@ class Gamesys():
                     currentdisplayscenesobjectclick.click = False
                     self.execute('swapscene', currentdisplayscenesobjectclick.assignment)
 
-        for diariesclick in diaries:
-            if diariesclick.click == True:
+        for currentdiaries in diaries:
+            if currentdiaries.click == True:
                 print('diaries')
-                print(diariesclick)
-                diariesclick.click = False
+                print(currentdiaries.click)
+                currentdiaries.click = False
+                print(currentdiaries.click)
+                self.diary(currentdiaries.click)
+                
 
-                self.diary(diariesclick)
-                print(diariesclick)
 
-
-                time.sleep(0.2)
+                
 
         self.update()
         pygame.display.update()
@@ -642,13 +642,15 @@ class Gamesys():
         if room == madamroomdiarycover:
             print('plz no')
             updatelist.append(madamroomdiaryopen)
-
+            time.sleep(0.2)
             while True:
                 self.whilerepeat()
-
+                print('mouseclick' + str(self.mouseclick))
+                print('roomcollidepoint' + str(room.rect.collidepoint(pygame.mouse.get_pos())))
+                
                 if self.mouseclick == True and room.rect.collidepoint(pygame.mouse.get_pos()) != False:
                     break
-            print('maybe?')
+            
             updatelist.remove(madamroomdiaryopen)
 
 
@@ -657,9 +659,10 @@ class Gamesys():
 
 system = Gamesys()
 
-system.currentstagedetect()
+#system.currentstagedetect()
 clock.tick(60)
 while run:
-    system.whilerepeat()
+    pass
+    #system.whilerepeat()
 
     #vscode is testing
