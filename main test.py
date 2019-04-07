@@ -102,7 +102,6 @@ class objects(pygame.sprite.Sprite):
 
     def detectmouse(self):#''''''
         if self.rect.collidepoint(pygame.mouse.get_pos()) and system.mouseclick == True:
-            print('object click is true')
             self.click = True
         else:
             self.click = False
@@ -208,7 +207,7 @@ class Gamesys():
         madamlockbox2 = objects(500,300,9,250,150)
         madamlockbox2.assignrespond(4)
         madamroomdiarycover = objects(400, 150, 12, 150, 225)
-        madamroomdiaryopen = objects(400, 150, 14, 1000, 500)
+        madamroomdiaryopen = objects(400, 50, 14, 1300, 800)
         madamroomobjects = []
         madamroomobjects.append(madambox)
         madamroomobjects.append(madamlockbox1)
@@ -343,7 +342,7 @@ class Gamesys():
                 print(currentdiaries.click)
                 currentdiaries.click = False
                 print(currentdiaries.click)
-                self.diary(currentdiaries.click)
+                self.diary(currentdiaries)
                 
 
 
@@ -425,13 +424,14 @@ class Gamesys():
         while self.mouseclick == False:
             self.whilerepeat()
         txtdis.renew(0)
-        time.sleep(0.2)
-        updatelist.append(txtdis)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while self.mouseclick == False:
             self.whilerepeat()
         txtdis.renew(1)
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
@@ -444,12 +444,13 @@ class Gamesys():
         txtdis.renew(2)
 
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
         txtdis.renew(3)
-        print('3')
+
         self.whilerepeat()
         time.sleep(0.2)
         self.whilerepeat()
@@ -466,25 +467,27 @@ class Gamesys():
             self.whilerepeat()
         txtdis.renew(4)
 
-        print('4')
+
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
         txtdis.renew(5)
 
-        print('5')
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
         txtdis.renew(6)
 
-        print('6')
+
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
                 self.whilerepeat()
@@ -502,60 +505,68 @@ class Gamesys():
 
 
         txtdis.renew(7)
-        print('7')
-        time.sleep(0.2)
+
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
                 self.whilerepeat()
         txtdis.renew(8)
 
-        print('8')
+
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
         txtdis.renew(9)
 
-        print('9')
+
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
-                self.whilerepeat()
+            self.whilerepeat()
         txtdis.renew(10)
 
-        print('10')
+
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
-                self.whilerepeat()
+            self.whilerepeat()
         txtdis.renew(11)
 
-        print('11')
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
-                self.whilerepeat()
+            self.whilerepeat()
         txtdis.renew(12)
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
-                self.whilerepeat()
+            self.whilerepeat()
         txtdis.renew(13)
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
-                self.whilerepeat()
+            self.whilerepeat()
         txtdis.renew(14)
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
@@ -573,7 +584,6 @@ class Gamesys():
         txtdis.load(1)
         bg.updateimage(9,0,0,0,0)
         updatelist.remove(textbar)
-        updatelist.remove(txtdis)
         updatelist.remove(txtdis)
         for i in range(25):
             screen.fill((0,0,0))
@@ -646,9 +656,9 @@ class Gamesys():
             while True:
                 self.whilerepeat()
                 print('mouseclick' + str(self.mouseclick))
-                print('roomcollidepoint' + str(room.rect.collidepoint(pygame.mouse.get_pos())))
+                print('roomcollidepoint' + str(madamroomdiaryopen.rect.collidepoint(pygame.mouse.get_pos())))
                 
-                if self.mouseclick == True and room.rect.collidepoint(pygame.mouse.get_pos()) != False:
+                if self.mouseclick == True and madamroomdiaryopen.rect.collidepoint(pygame.mouse.get_pos()) == False:
                     break
             
             updatelist.remove(madamroomdiaryopen)
@@ -659,10 +669,9 @@ class Gamesys():
 
 system = Gamesys()
 
-#system.currentstagedetect()
+system.currentstagedetect()
 clock.tick(60)
 while run:
-    pass
-    #system.whilerepeat()
+    system.whilerepeat()
 
     #vscode is testing
