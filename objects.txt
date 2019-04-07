@@ -13,3 +13,5 @@ objects/scene1/openbox2madam.png
 objects/scene1/diary/redcover.png
 objects/scene1/diary/bluecover.png
 objects/scene1/diary/redopen.png
+objects/scene1/diary/leftarrow.png
+objects/scene1/diary/rightarrow.png

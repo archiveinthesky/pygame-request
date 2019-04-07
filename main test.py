@@ -95,12 +95,17 @@ class objects(pygame.sprite.Sprite):
         self.click = False
         self.assignment = False
         self.response = 1
+        self.hover = False
     def update(self):
         self.detectmouse()
         self.image.set_alpha(self.alpha)
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def detectmouse(self):#''''''
+        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
+            self.hover = True
+        else:
+            self.hover = False
         if self.rect.collidepoint(pygame.mouse.get_pos()) and system.mouseclick == True:
             self.click = True
         else:
@@ -167,7 +172,7 @@ txtdis.renew(0)
 class Gamesys():
     def __init__(self):
 
-        global textbar, objectbar, updatelist, fadelist, menushow, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries
+        global textbar, objectbar, updatelist, fadelist, menushow, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow
         global madamroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen #stage1
         self.currentdisplayscene =[]
         textbar = background()
@@ -177,7 +182,7 @@ class Gamesys():
         objectbar.updateimage(1, 0, 0,360,800)
 
 
-
+        self.diarypage = 1
 
 
         self.currentstage = '00'
@@ -213,6 +218,9 @@ class Gamesys():
         madamroomobjects.append(madamlockbox1)
         madamroomobjects.append(madamlockbox2)
         madamroomobjects.append(madamroomdiarycover)
+        
+        diaryleftarrow = objects(400, 700, 15, 200, 150)
+        diaryrightarrow = objects(1500, 700, 16, 200, 150)
 
 
         diaries = []
@@ -406,7 +414,6 @@ class Gamesys():
             self.fadeout()
             pygame.display.update()
         self.currentstage02()
-
 
     def currentstage02(self):
         self.currentstage = '02'
@@ -650,15 +657,31 @@ class Gamesys():
                     # print('false respond')
     def diary(self, room):
         if room == madamroomdiarycover:
-            print('plz no')
+  
             updatelist.append(madamroomdiaryopen)
+            updatelist.append(diaryleftarrow)
+            updatelist.append(diaryrightarrow)
             time.sleep(0.2)
             while True:
                 self.whilerepeat()
-                print('mouseclick' + str(self.mouseclick))
-                print('roomcollidepoint' + str(madamroomdiaryopen.rect.collidepoint(pygame.mouse.get_pos())))
+                if diaryrightarrow.click == True:
+                    if self.diarypage == 6:
+                        self.diarypage = 1
+                    else:
+                        self.diarypage = self.diarypage + 1
+                    print(self.diarypage)
+                    while self.mouseclick != False:
+                        self.whilerepeat()
+                elif diaryleftarrow.click == True:
+                    if self.diarypage == 1:
+                        self.diarypage = 6
+                    else:
+                        self.diarypage = self.diarypage - 1
+                    print(self.diarypage)
+                    while self.mouseclick != False:
+                        self.whilerepeat()
                 
-                if self.mouseclick == True and madamroomdiaryopen.rect.collidepoint(pygame.mouse.get_pos()) == False:
+                if self.mouseclick == True and madamroomdiaryopen.hover == False: #and diaryleftarrow.hover == False and diaryrightarrow.hover == False:
                     break
             
             updatelist.remove(madamroomdiaryopen)
