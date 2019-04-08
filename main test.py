@@ -145,7 +145,7 @@ class textdisplay(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.txtarray= []
-
+        self.passwordmode = False
     def load(self,doc):
         scriptread = open('texts/stage' + str(doc) + 'text.txt', 'r', encoding = 'utf8')
         global script
@@ -155,6 +155,7 @@ class textdisplay(pygame.sprite.Sprite):
         self.line = script[line]
         self.current = 1
         self.goal = len(self.line)
+    
     def update(self):
         if self.current == self.goal:
             screen.blit(textfont.render(self.line, False, (255, 255, 255)),(0,850))
@@ -162,6 +163,8 @@ class textdisplay(pygame.sprite.Sprite):
         else:
             self.current = self.current + 1
             screen.blit(textfont.render(self.line[:self.current], False, (255, 255, 255)),(0,850))
+    
+
 
 
 txtdis = textdisplay()
@@ -172,7 +175,7 @@ txtdis.renew(0)
 class Gamesys():
     def __init__(self):
 
-        global textbar, objectbar, updatelist, fadelist, menushow, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow
+        global textbar, objectbar, updatelist, fadelist, menushow, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow, currenttyped
         global madamroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen #stage1
         self.currentdisplayscene =[]
         textbar = background()
@@ -634,6 +637,18 @@ class Gamesys():
         print('currentstage11')
         self.execute('swapscene', 'swapmadamroom')
 
+    def type(self):
+        pass
+    
+    def enterpassword(self, password): 
+        bg.updateimage(11,352,0,1568,840)
+        screen.blit(textfont.render(str(currenttyped), False, (255,255,255),(500, 550))
+        if enter == True:
+            if currenttyped == password:
+                pass
+            else:
+                pass
+        
     def madamroom(self):
         print('madamroom')
         while True:

@@ -9,3 +9,4 @@ backgrounds/stage0/candlehallway.jpg
 backgrounds/test1.jpg
 backgrounds/stage1/startescape1.png
 backgrounds/stage1/madamroom.jpg
+backgrounds/unlock.png
