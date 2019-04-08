@@ -684,7 +684,9 @@ class Gamesys():
                 if self.mouseclick == True and madamroomdiaryopen.hover == False: #and diaryleftarrow.hover == False and diaryrightarrow.hover == False:
                     break
             
-            updatelist.remove(madamroomdiaryopen)
+            updatelist.remove(madamroomdiaryopen)  
+            updatelist.remove(diaryleftarrow)
+            updatelist.remove(diaryrightarrow)
 
 
 
