@@ -221,9 +221,9 @@ class Gamesys():
 
         madambox = objects(850,100,7,300,300)
         madambox.assignrespond(2)
-        madamlockbox1 = objects(500,200,8,250,150)
+        madamlockbox1 = objects(550,200,8,250,150)
         madamlockbox1.assignrespond(3)
-        madamlockbox2 = objects(500,300,9,250,150)
+        madamlockbox2 = objects(550,300,9,250,150)
         madamlockbox2.assignrespond(4)
         madamroomdiarycover = objects(400, 150, 12, 150, 225)
         madamroomdiaryopen = objects(400, 50, 14, 1300, 800)
@@ -666,8 +666,10 @@ class Gamesys():
             updatelist.append(i)
 
     def waituntilmouserelease(self):
-        while self.mouseclick != False:
-            self.whilerepeat
+        while self.mouseclick == False:
+            self.whilerepeat()
+        while self.mouseclick == True:
+            self.whilerepeat()
         
     def madamroom(self):
         print('madamroom')
@@ -689,11 +691,14 @@ class Gamesys():
             self.whilerepeat()
             bg.detectmouse()
             if bg.hover == True and self.mouseclick == True:
+                self.mouseclick = False
                 txtdis.renew(5)
-                self.waituntilmouserelease
+                self.waituntilmouserelease()
                 txtdis.renew(6)
-                self.waituntilmouserelease
+                self.waituntilmouserelease()
                 txtdis.renew(7)
+                self.waituntilmouserelease()
+                txtdis.renew(1)
                 self.waituntilmouserelease
 
             if self.currentdisplayscene != dukeroomobjects:

@@ -9,6 +9,6 @@ backgrounds/stage0/candlehallway.jpg
 backgrounds/test1.jpg
 backgrounds/stage1/startescape1.png
 backgrounds/stage1/madamroom.jpg
-backgrounds/Unlock.png
+backgrounds/unlock.png
 backgrounds/stage1/dukeroomdoor.png
 backgrounds/stage1/orphanigedoor.png
