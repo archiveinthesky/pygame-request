@@ -637,17 +637,6 @@ class Gamesys():
         print('currentstage11')
         self.execute('swapscene', 'swapmadamroom')
 
-    def type(self):
-        pass
-    
-    def enterpassword(self, password): 
-        bg.updateimage(11,352,0,1568,840)
-        screen.blit(textfont.render(str(currenttyped), False, (255,255,255),(500, 550))
-        if enter == True:
-            if currenttyped == password:
-                pass
-            else:
-                pass
         
     def madamroom(self):
         print('madamroom')
