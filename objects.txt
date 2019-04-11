@@ -15,3 +15,4 @@ objects/scene1/diary/bluecover.png
 objects/scene1/diary/redopen.png
 objects/scene1/diary/leftarrow.png
 objects/scene1/diary/rightarrow.png
+objects/scene1/dukeroomicon.png
