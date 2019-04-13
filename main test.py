@@ -166,11 +166,11 @@ class textdisplay(pygame.sprite.Sprite):
     
     def update(self):
         if self.current == self.goal:
-            screen.blit(textfont.render(self.line, False, (255, 255, 255)),(0,850))
+            screen.blit(textfont.render(self.line, False, (255, 0, 0)),(0,850))
 
         else:
             self.current = self.current + 1
-            screen.blit(textfont.render(self.line[:self.current], False, (255, 255, 255)),(0,850))
+            screen.blit(textfont.render(self.line[:self.current], False, (255, 0, 0)),(0,850))
     
 
 
