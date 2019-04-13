@@ -22,15 +22,10 @@ for obt in obtxt:
 global run
 run = True
 
-
-
-
 bgno = 0
 screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
 run = 1
 screenmode = 1
-
-
 
 textfont = pygame.font.Font("texts/brushpen.ttc", 40)
 
@@ -38,7 +33,6 @@ textfont = pygame.font.Font("texts/brushpen.ttc", 40)
 '''pygame.mixer.init()
 pygame.mixer.music.load('bgm.mp3')
 pygame.mixer.music.play()'''
-
 class background(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -262,9 +256,6 @@ class Gamesys():
             updatelist.append(startgame)
             fadelist.append(bg)
             fadelist.append(startgame)
-            if startgame.click == True:
-                #self.currentstage01()
-                pass
 
     def update(self):
         screen.fill((0,0,0))
@@ -273,7 +264,6 @@ class Gamesys():
         if startgame.click == True and self.currentstage == '00':
             startgame.click = False
             self.currentstage01()
-
 
         if self.menushow == 1:
             self.menu()
@@ -298,8 +288,6 @@ class Gamesys():
         updatelist.append(menufullscreencheckbox)
         screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
 
-    def updateevents(self):
-        pass
 
     def menu(self):
         if self.menufullscreen == False and menufullscreencheckbox.click == True:
@@ -704,8 +692,7 @@ class Gamesys():
                 if i.click == True:
                     print('True')
                     i.respond()
-                else:
-                    pass
+
                     #print('false respond')
     def dukeroomlocked(self):
 
@@ -737,8 +724,7 @@ class Gamesys():
                 if i.click == True:
                     print('True')
                     i.respond()
-                else:
-                    pass
+
         
 
     def woodendoor(self):
