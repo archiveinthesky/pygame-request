@@ -1,5 +1,4 @@
 import pygame
-import pyganim
 import time
 
 pygame.init()
@@ -23,19 +22,17 @@ for obt in obtxt:
 global run
 run = True
 
-
-
-
 bgno = 0
 screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
 run = 1
 screenmode = 1
 
-
-
 textfont = pygame.font.Font("texts/brushpen.ttc", 40)
 
 
+'''pygame.mixer.init()
+pygame.mixer.music.load('bgm.mp3')
+pygame.mixer.music.play()'''
 class background(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -57,10 +54,16 @@ class background(pygame.sprite.Sprite):
         else:
             self.image = pygame.transform.scale(bgs[self.bgno],(resizex,resizey)).convert()
         self.alpha = 0
-        self.image.set_colorkey(pygame.Color(255, 255, 255))
+        self.image.set_colorkey(pygame.Color(0, 0, 0))
         self.rect = self.image.get_rect()
         self.rect.x = blitx
         self.rect.y = blity
+
+    def detectmouse(self):
+        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
+            self.hover = True
+        else:
+            self.hover = False
 
     def fadeout(self):
         self.alpha = self.alpha - 10
@@ -84,21 +87,29 @@ class objects(pygame.sprite.Sprite):
         else:
             self.image = pygame.transform.scale(obs[image], (resizex, resizey)).convert()
         self.image.set_alpha(0)
-        self.image.set_colorkey(pygame.Color(255, 255, 255))
+        self.image.set_colorkey(pygame.Color(0, 0, 0))
         self.alpha = 255
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.click = False
-
+        self.assignment = False
+        self.response = 1
+        self.hover = False
     def update(self):
         self.detectmouse()
         self.image.set_alpha(self.alpha)
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def detectmouse(self):#''''''
-        if self.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0] == 1 :
+        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
+            self.hover = True
+        else:
+            self.hover = False
+        if self.rect.collidepoint(pygame.mouse.get_pos()) and system.mouseclick == True:
             self.click = True
+        else:
+            self.click = False
 
     def fadeout(self):
         self.alpha = self.alpha - 10
@@ -107,16 +118,27 @@ class objects(pygame.sprite.Sprite):
     def fadein(self):
         self.alpha = self.alpha + 10
         self.update()
-
-
+    def assign(self, mission):
+        self.assignment = mission
+    def assignrespond(self, responce):
+        self.response = responce
+    def respond(self):
+        txtdis.renew(self.response)
+        while system.mouseclick != False:
+            system.whilerepeat()
+        while system.mouseclick != True:
+            system.whilerepeat()
+        txtdis.renew(1)
 startgame = objects(300, 650, 0, 510, 202)
 objs.append(startgame)
 startgame.alpha = 255
 
-menu = objects(650,150,1,0,0)
-menufullscreencheck = objects(950,425,2,0,0)
-menufullscreencheckbox = objects(950,425,3,0,0)
-menuleavegame = objects(680,550,4,450,180)
+menu = objects(550,150,1,766,887)
+menufullscreencheck = objects(1010,455,2,100,80)
+menufullscreencheckbox = objects(1010,455,3,80,80)
+
+
+menuleavegame = objects(730,550,4,450,180)
 
 
 
@@ -125,7 +147,7 @@ class textdisplay(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.txtarray= []
-
+        self.passwordmode = False
     def load(self,doc):
         scriptread = open('texts/stage' + str(doc) + 'text.txt', 'r', encoding = 'utf8')
         global script
@@ -135,13 +157,16 @@ class textdisplay(pygame.sprite.Sprite):
         self.line = script[line]
         self.current = 1
         self.goal = len(self.line)
+    
     def update(self):
         if self.current == self.goal:
-            screen.blit(textfont.render(self.line, False, (255, 255, 255)),(0,850))
+            screen.blit(textfont.render(self.line, False, (255, 0, 0)),(0,850))
 
         else:
             self.current = self.current + 1
-            screen.blit(textfont.render(self.line[:self.current], False, (255, 255, 255)),(0,850))
+            screen.blit(textfont.render(self.line[:self.current], False, (255, 0, 0)),(0,850))
+    
+
 
 
 txtdis = textdisplay()
@@ -152,18 +177,73 @@ txtdis.renew(0)
 class Gamesys():
     def __init__(self):
 
-        global textbar, objectbar, updatelist, fadelist, menushow
+        global textbar, objectbar, updatelist, fadelist, menushow, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow, currenttyped
+        global madamroomicon, dukeroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen, dukeroomobjects, dukeroomdiarycover, dukeroomdiaryopen, dukeroomnewspaper, dukeroomlockobjects #stage1
+        self.currentdisplayscene =[]
         textbar = background()
         textbar.updateimage(0, 0, 840,1920,250)
 
         objectbar = background()
         objectbar.updateimage(1, 0, 0,360,800)
 
+
+        self.diarypage = 1
+        self.dukeroomlock = True
+
         self.currentstage = '00'
 
         updatelist = []
 
         fadelist = []
+
+        currentdisplayscenes = []
+        currentdisplaybuttons = []
+        currentsceneobjects = []
+        woodendoorobjects = []
+        dukeroomobjects = []
+        dukeroomlockobjects = []
+
+        madamroomicon = objects(0,800,5,80,45)
+        dukeroomicon = objects(80, 800, 17, 80, 45)
+        woodendooricon = objects(160,800,6,80,45)
+        madamroomicon.assign('swapmadamroom')
+        dukeroomicon.assign('swapdukeroom')
+        woodendooricon.assign('swapwoodendoor')
+        currentdisplaybuttons.append(madamroomicon)
+        currentdisplaybuttons.append(dukeroomicon)
+        currentdisplaybuttons.append(woodendooricon)
+
+        
+        dukeroomdiarycover = objects(400,150,13,150,225)
+        dukeroomdiaryopen = objects(400, 50, 18, 1300, 800)
+        dukeroomobjects.append(dukeroomdiarycover)
+
+        madambox = objects(850,100,7,300,300)
+        madambox.assignrespond(2)
+        madamlockbox1 = objects(550,200,8,250,150)
+        madamlockbox1.assignrespond(3)
+        madamlockbox2 = objects(550,300,9,250,150)
+        madamlockbox2.assignrespond(4)
+        madamroomdiarycover = objects(400, 150, 12, 150, 225)
+        madamroomdiaryopen = objects(400, 50, 14, 1300, 800)
+        madamroomobjects = []
+        madamroomobjects.append(madambox)
+        madamroomobjects.append(madamlockbox1)
+        madamroomobjects.append(madamlockbox2)
+        madamroomobjects.append(madamroomdiarycover)
+        
+
+
+        diaryleftarrow = objects(400, 700, 15, 200, 150)
+        diaryrightarrow = objects(1500, 700, 16, 200, 150)
+
+
+        diaries = []
+        diaries.append(madamroomdiarycover)
+        diaries.append(dukeroomdiarycover)
+
+
+        self.currentdisplayscene = madamroomobjects
 
         self.menushow = 0
         self.menuendexecute = False
@@ -176,15 +256,15 @@ class Gamesys():
             updatelist.append(startgame)
             fadelist.append(bg)
             fadelist.append(startgame)
-            if startgame.click == True:
-                self.currentstage01()
 
     def update(self):
+        screen.fill((0,0,0))
         for updateobjects in updatelist:
             updateobjects.update()
         if startgame.click == True and self.currentstage == '00':
             startgame.click = False
             self.currentstage01()
+
         if self.menushow == 1:
             self.menu()
 
@@ -207,9 +287,6 @@ class Gamesys():
         updatelist.remove(menufullscreencheck)
         updatelist.append(menufullscreencheckbox)
         screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
-
-
-
 
 
     def menu(self):
@@ -237,8 +314,11 @@ class Gamesys():
                 self.mouseclick = True
             else:
                 self.mouseclick = False
+
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_F10:
+                print('keydown')
+                if event.key == pygame.K_ESCAPE:
+                    print('Escape')
                     if self.menushow == 0:
                         updatelist.append(menu)
                         updatelist.append(menuleavegame)
@@ -262,13 +342,91 @@ class Gamesys():
                 run = False
                 pygame.quit()
                 exit()
-        system.update()
+
+        for currentdisplayscenesobject in currentdisplaybuttons:
+            if currentdisplayscenesobject.click == True:
+                if currentdisplayscenesobject == madamroomicon:
+                    print('madamroomicon click')
+                    currentdisplayscenesobject.click = False
+                    self.execute('swapscene', currentdisplayscenesobject.assignment)
+                elif currentdisplayscenesobject == dukeroomicon:
+                    currentdisplayscenesobject.click = False
+                    self.execute('swapscene', currentdisplayscenesobject.assignment)
+                elif currentdisplayscenesobject == woodendooricon:
+                    print('woodendoor click')
+                    currentdisplayscenesobject.click = False
+                    self.execute('swapscene', currentdisplayscenesobject.assignment)
+
+        for currentdiaries in diaries:
+            if currentdiaries.click == True:
+                print('diaries')
+                print(currentdiaries.click)
+                currentdiaries.click = False
+                print(currentdiaries.click)
+                self.diary(currentdiaries)
+                                
+
+        self.update()
         pygame.display.update()
 
 
+    def execute(self, type, mission):
+        if type == 'swapscene':
+            if mission == 'swapmadamroom':
+                while self.mouseclick != False:
+                    self.whilerepeat()
+                for i in self.currentdisplayscene:
+                    updatelist.remove(i)
+                bg.updateimage(10,352,0,1568,840)
+                bg.alpha = 255
+                self.currentdisplayscene = madamroomobjects
+                for i in madamroomobjects:
+                    updatelist.append(i)
+                self.madamroom()
+            elif mission == 'swapdukeroom':
+                if self.dukeroomlock == True: 
+                    time.sleep(0.2)
+                    while self.mouseclick != False:
+                        self.whilerepeat()
+                    for i in self.currentdisplayscene:
+                        updatelist.remove(i)
+                    bg.updateimage(12, 352, 0, 1568, 840)
+                    bg.alpha = 255
+                    self.currentdisplayscene = dukeroomlockobjects
+                    for i in dukeroomlockobjects:
+                        updatelist.append(i)
+                    self.dukeroomlocked()
+                else:
+                    while self.mouseclick != False:
+                        self.whilerepeat()
+                    for i in self.currentdisplayscene:
+                        updatelist.remove(i)
+                    bg.updateimage(14, 352, 0, 1568, 840)
+                    bg.alpha = 255
+                    self.currentdisplayscene = dukeroomobjects
+                    for i in dukeroomobjects:
+                        updatelist.append(i)
+                    self.dukeroom()
+            elif mission == 'swapwoodendoor':
+                while self.mouseclick != False:
+                    self.whilerepeat()
+                print('swapwoodendoor')
+                for i in self.currentdisplayscene:
+                    updatelist.remove(i)
+                    print('removing')
+                    print(i)
+                bg.updateimage(13,352,0,1568,840)
+                print('bgupdateimage')
+                bg.alpha = 255
+                self.currentdisplayscene = woodendoorobjects
+                print('woodendoorobjectsswitching')
+                self.update()
+                print('self.update')
+                pygame.display.update()
+                print('pygame.display.update')
 
 
-
+                self.woodendoor()
     def currentstage01(self):
         self.currentstage == '01'
 
@@ -283,7 +441,7 @@ class Gamesys():
             screen.fill((0, 0, 0))
             self.fadein()
             pygame.display.update()
-        for i in range(300):
+        for i in range(0):
             self.whilerepeat()
         for i in range(30):
             screen.fill((0, 0, 0))
@@ -301,14 +459,20 @@ class Gamesys():
             screen.fill((0, 0, 0))
             self.fadein()
             pygame.display.update()
-
-        txtdis.renew(0)
+        txtdis.renew(15)
         updatelist.append(txtdis)
         self.whilerepeat()
         while self.mouseclick == False:
             self.whilerepeat()
+        txtdis.renew(0)
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while self.mouseclick == False:
+            self.whilerepeat()
         txtdis.renew(1)
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
@@ -321,12 +485,13 @@ class Gamesys():
         txtdis.renew(2)
 
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
         txtdis.renew(3)
-        print('3')
+
         self.whilerepeat()
         time.sleep(0.2)
         self.whilerepeat()
@@ -343,25 +508,27 @@ class Gamesys():
             self.whilerepeat()
         txtdis.renew(4)
 
-        print('4')
+
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
         txtdis.renew(5)
 
-        print('5')
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
         txtdis.renew(6)
 
-        print('6')
+
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
                 self.whilerepeat()
@@ -379,60 +546,68 @@ class Gamesys():
 
 
         txtdis.renew(7)
-        print('7')
-        time.sleep(0.2)
+
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
                 self.whilerepeat()
         txtdis.renew(8)
 
-        print('8')
+
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
         txtdis.renew(9)
 
-        print('9')
+
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
-                self.whilerepeat()
+            self.whilerepeat()
         txtdis.renew(10)
 
-        print('10')
+
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
-                self.whilerepeat()
+            self.whilerepeat()
         txtdis.renew(11)
 
-        print('11')
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
-                self.whilerepeat()
+            self.whilerepeat()
         txtdis.renew(12)
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
-                self.whilerepeat()
+            self.whilerepeat()
         txtdis.renew(13)
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
-                self.whilerepeat()
+            self.whilerepeat()
         txtdis.renew(14)
         self.whilerepeat()
-        time.sleep(0.2)
+        while self.mouseclick != False:
+            self.whilerepeat()
         self.whilerepeat()
         while pygame.mouse.get_pressed()[0] == 0:
             self.whilerepeat()
@@ -447,6 +622,7 @@ class Gamesys():
 
     def currentstage10(self):
         print('Entering Escape')
+        txtdis.load(1)
         bg.updateimage(9,0,0,0,0)
         updatelist.remove(textbar)
         updatelist.remove(txtdis)
@@ -463,21 +639,154 @@ class Gamesys():
         bg.alpha = -45
         textbar.alpha = -45
         objectbar.alpha = -45
+        madamroomicon.alpha = -45
+        woodendooricon.alpha = -45
         bg.updateimage(10,352,0,1568,840)
+        txtdis.load(1)
+        txtdis.renew(1)
+        print('currentstage10')
+        self.currentstage11()
+    def currentstage11(self):
 
+        updatelist.append(textbar)
+        updatelist.append(objectbar)
+        self.updateicons()
+        fadelist.append(textbar)
         fadelist.append(objectbar)
+        fadelist.append(madamroomicon)
+        fadelist.append(woodendooricon)
         for i in range(30):
             screen.fill((0,0,0))
             self.fadein()
             self.whilerepeat()
-        updatelist.append(textbar)
-        updatelist.append(txtdis)
-        updatelist.append(objectbar)
+
+        for i in self.currentdisplayscene:
+            updatelist.append(i)
         print(updatelist)
+        updatelist.append(txtdis)
+        print('currentstage11')
+        self.execute('swapscene', 'swapmadamroom')
+    def currentstage12(self):
+        #unlocked duke room
+        self.currentstage = '12'
+        self.dukeroomlock = False
+        
+    def updateicons(self):
+        for i in currentdisplaybuttons:
+            updatelist.append(i)
+
+    def waituntilmouserelease(self):
+        while self.mouseclick == False:
+            self.whilerepeat()
+        while self.mouseclick == True:
+            self.whilerepeat()
+        
+    def madamroom(self):
+        print('madamroom')
+        while True:
+            self.whilerepeat()
+
+            if self.currentdisplayscene != madamroomobjects:
+                break
+            for i in madamroomobjects:
+                if i.click == True:
+                    print('True')
+                    i.respond()
+
+                    #print('false respond')
+    def dukeroomlocked(self):
+
+        while True:
+            self.whilerepeat()
+            bg.detectmouse()
+            if bg.hover == True and self.mouseclick == True:
+                self.mouseclick = False
+                txtdis.renew(5)
+                self.waituntilmouserelease()
+                txtdis.renew(6)
+                self.waituntilmouserelease()
+                txtdis.renew(7)
+                self.waituntilmouserelease()
+                txtdis.renew(1)
+                self.waituntilmouserelease
+                
+
+            if self.currentdisplayscene != dukeroomlockobjects:
+                self.currentstage12()
+                break
+
+    def dukeroom(self):
+        while True:
+            self.whilerepeat()
+            if self.currentdisplayscene != dukeroomobjects:
+                break
+            for i in dukeroomobjects:
+                if i.click == True:
+                    print('True')
+                    i.respond()
+
+        
+
+    def woodendoor(self):
+        while True:
+            self.whilerepeat()
+            if self.currentdisplayscene != woodendoorobjects:
+                break
+
+                    # print('false respond')
+    def diary(self, room):
+        if room == madamroomdiarycover:
+  
+            updatelist.append(madamroomdiaryopen)
+            updatelist.append(diaryleftarrow)
+            updatelist.append(diaryrightarrow)
+            time.sleep(0.2)
+            while True:
+                self.whilerepeat()
+                if diaryrightarrow.click == True:
+                    if self.diarypage == 6:
+                        self.diarypage = 1
+                    else:
+                        self.diarypage = self.diarypage + 1
+                    print(self.diarypage)
+                    while self.mouseclick != False:
+                        self.whilerepeat()
+                elif diaryleftarrow.click == True:
+                    if self.diarypage == 1:
+                        self.diarypage = 6
+                    else:
+                        self.diarypage = self.diarypage - 1
+                    print(self.diarypage)
+                    while self.mouseclick != False:
+                        self.whilerepeat()
+                
+                if self.mouseclick == True and madamroomdiaryopen.hover == False: 
+                    break
+            
+            updatelist.remove(madamroomdiaryopen)  
+            updatelist.remove(diaryleftarrow)
+            updatelist.remove(diaryrightarrow)
+        if room == dukeroomdiarycover:
+  
+            updatelist.append(dukeroomdiaryopen)
+            time.sleep(0.2)
+            while True:
+                self.whilerepeat()
+                if self.mouseclick == True and dukeroomdiaryopen.hover == False: 
+                    break
+            
+            updatelist.remove(dukeroomdiaryopen)  
+
+
+
+
+
+
 system = Gamesys()
 
 system.currentstagedetect()
 clock.tick(60)
-
 while run:
     system.whilerepeat()
+
+    #vscode is testing
