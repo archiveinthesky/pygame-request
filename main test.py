@@ -160,11 +160,11 @@ class textdisplay(pygame.sprite.Sprite):
     
     def update(self):
         if self.current == self.goal:
-            screen.blit(textfont.render(self.line, False, (255, 0, 0)),(0,850))
+            screen.blit(textfont.render(self.line, False, (150, 0, 0)),(0,850))
 
         else:
             self.current = self.current + 1
-            screen.blit(textfont.render(self.line[:self.current], False, (255, 0, 0)),(0,850))
+            screen.blit(textfont.render(self.line[:self.current], False, (150, 0, 0)),(0,850))
     
 
 
@@ -220,11 +220,11 @@ class Gamesys():
 
         madambox = objects(850,400,7,300,300)
         madambox.assignrespond(2)
-        madamlockbox1 = objects(1550,200,8,130,70)
+        madamlockbox1 = objects(1550,430,8,90,45)
         madamlockbox1.assignrespond(3)
-        madamlockbox2 = objects(1750,300,9,130,70)
+        madamlockbox2 = objects(1750,430,9,90,45)
         madamlockbox2.assignrespond(4)
-        madamroomdiarycover = objects(1500, 1050, 12, 100, 170)
+        madamroomdiarycover = objects(900, 300, 12, 100, 170)
         madamroomdiaryopen = objects(400, 50, 14, 1300, 800)
         madamroomobjects = []
         madamroomobjects.append(madambox)
@@ -630,7 +630,7 @@ class Gamesys():
             screen.fill((0,0,0))
             bg.alpha = bg.alpha + i * 25.5
             self.whilerepeat()
-        for i in range(180):
+        for i in range(0):
             self.whilerepeat()
         for i in range(25):
             screen.fill((0,0,0))
