@@ -1,0 +1,160 @@
+        for i in range(30):
+            screen.fill((0, 0, 0))
+            self.fadein()
+            pygame.display.update()
+        #cutted into main
+        self.whilerepeat()
+        while self.mouseclick == False:
+            self.whilerepeat()
+        txtdis.renew(0)
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while self.mouseclick == False:
+            self.whilerepeat()
+        txtdis.renew(1)
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        print('continue')
+        bg.updateimage(5,0,0,0,0)
+        for i in range(30):
+            screen.fill((0,0,0))
+            self.fadein()
+            self.whilerepeat()
+        txtdis.renew(2)
+
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        txtdis.renew(3)
+
+        self.whilerepeat()
+        time.sleep(0.2)
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        for i in range(30):
+            screen.fill((0,0,0))
+            self.fadeout()
+            self.whilerepeat()
+        bg.updateimage(6,0,0,0,0)
+        for i in range(30):
+            screen.fill((0,0,0))
+            self.fadein()
+            self.whilerepeat()
+        txtdis.renew(4)
+
+
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        txtdis.renew(5)
+
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        txtdis.renew(6)
+
+
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+                self.whilerepeat()
+
+        for i in range(30):
+            screen.fill((0,0,0))
+            self.fadeout()
+            self.whilerepeat()
+        bg.updateimage(7,0,0,0,0)
+        for i in range(30):
+            screen.fill((0,0,0))
+            self.fadein()
+            self.whilerepeat()
+        txtdis.renew(4)
+
+
+        txtdis.renew(7)
+
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+                self.whilerepeat()
+        txtdis.renew(8)
+
+
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        txtdis.renew(9)
+
+
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        txtdis.renew(10)
+
+
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        txtdis.renew(11)
+
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        txtdis.renew(12)
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        txtdis.renew(13)
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        txtdis.renew(14)
+        self.whilerepeat()
+        while self.mouseclick != False:
+            self.whilerepeat()
+        self.whilerepeat()
+        while pygame.mouse.get_pressed()[0] == 0:
+            self.whilerepeat()
+        for i in range(30):
+            screen.fill((0,0,0))
+            self.fadeout()
+            self.whilerepeat()
+        bg.updateimage(8,0,0,0,0)
