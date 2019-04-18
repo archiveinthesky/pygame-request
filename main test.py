@@ -183,15 +183,19 @@ class diarypagedisplay(pygame.sprite.Sprite):
     def loadroom(self,room):
         if room == 'madamroom':
             for i in range(6):
-                currentdiaryroom.append(pygame.image.load('backgrounds/madamroomtext/' + str(i+1) + '.png'))
-                print('hiinloadrrom')
+                currentdiaryroom.append(pygame.transform.scale(pygame.image.load('backgrounds/madamroomtext/' + str(i+1) + '.png'),(1000,300)))
+                print('hiinloadrrom')   
+    def clearcurrentroom(self):
+        currentdiaryroom = []
     def updatepage(self, pagenum):
         print('length' + str(len(currentdiaryroom)))
         for i in currentdiaryroom:
             print('hi')
+        if currentdiaryroom[0] == currentdiaryroom[1]:
+            print('fuck')
         self.image = currentdiaryroom[pagenum]
     def update(self):
-        screen.blit(self.image, (400,50))
+        screen.blit(self.image, (550,200))
 diarypgdp = diarypagedisplay()
 
 
@@ -623,7 +627,7 @@ class Gamesys():
                     print(self.diarypage)
                     while self.mouseclick != False:
                         self.whilerepeat()
-                    diarypgdp.loadroom(self.diarypage)
+                    diarypgdp.updatepage(self.diarypage)
                 elif diaryleftarrow.click == True:
                     if self.diarypage == 0:
                         self.diarypage = 5
@@ -632,7 +636,7 @@ class Gamesys():
                     print(self.diarypage)
                     while self.mouseclick != False:
                         self.whilerepeat()
-                    diarypgdp.loadroom(self.diarypage)
+                    diarypgdp.updatepage(self.diarypage)
                 if self.mouseclick == True and madamroomdiaryopen.hover == False: 
                     break
             
