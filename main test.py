@@ -183,7 +183,10 @@ class diarypagedisplay(pygame.sprite.Sprite):
     def loadroom(self,room):
         if room == 'madamroom':
             for i in range(6):
-                currentdiaryroom.append(pygame.transform.scale(pygame.image.load('backgrounds/madamroomtext/' + str(i+1) + '.png'),(1000,300)))
+                pic = pygame.image.load('backgrounds/madamroomtext/' + str(i+1) + '.png')
+
+              
+                currentdiaryroom.append(pygame.transform.scale(pic,(1000,1000*pic.get_rect().size[1]//pic.get_rect().size[0])))
                 print('hiinloadrrom')   
     def clearcurrentroom(self):
         currentdiaryroom = []
@@ -191,8 +194,6 @@ class diarypagedisplay(pygame.sprite.Sprite):
         print('length' + str(len(currentdiaryroom)))
         for i in currentdiaryroom:
             print('hi')
-        if currentdiaryroom[0] == currentdiaryroom[1]:
-            print('fuck')
         self.image = currentdiaryroom[pagenum]
     def update(self):
         screen.blit(self.image, (550,200))
