@@ -181,20 +181,20 @@ class diarypagedisplay(pygame.sprite.Sprite):
         global currentdiaryroom
         currentdiaryroom = []
     def loadroom(self,room):
+
         if room == 'madamroom':
             for i in range(6):
-                pic = pygame.image.load('backgrounds/madamroomtext/' + str(i+1) + '.png')
+                pic = pygame.image.load('backgrounds/diarytext/' + str(i+1) + '.png')
 
               
                 currentdiaryroom.append(pygame.transform.scale(pic,(1000,1000*pic.get_rect().size[1]//pic.get_rect().size[0])))
-                print('hiinloadrrom')   
-    def clearcurrentroom(self):
-        currentdiaryroom = []
+        elif room == 'dukeroom':
+            pic = pygame.image.load('backgrounds/diarytext/' + str(1) + '.png')
+            currentdiaryroom.append((pygame.transform.scale(pic,(1000,1000*pic.get_rect().size[1]//pic.get_rect().size[0]))))
+        
     def updatepage(self, pagenum):
         print('length' + str(len(currentdiaryroom)))
-        for i in currentdiaryroom:
-            print('hi')
-        self.image = currentdiaryroom[pagenum]
+        self.image = currentdiaryroom[pagenum-1]
     def update(self):
         screen.blit(self.image, (550,200))
 diarypgdp = diarypagedisplay()
@@ -537,13 +537,14 @@ class Gamesys():
         print(updatelist)
         updatelist.append(txtdis)
         print('currentstage11')
+        self.currentstage12() #for debugging only
         self.execute('swapscene', 'swapmadamroom')
     def currentstage12(self):
         #unlocked duke room
         self.currentstage = '12'
         self.dukeroomlock = False
         global dukestudyicon
-        dukestudyicon = objects(240,800,5,80,45)
+        dukestudyicon = objects(240,800,19,80,45)
         updatelist.append(dukestudyicon)
     def updateicons(self):
         for i in currentdisplaybuttons:
@@ -614,6 +615,7 @@ class Gamesys():
             updatelist.append(madamroomdiaryopen)
             updatelist.append(diaryleftarrow)
             updatelist.append(diaryrightarrow)
+            currentdiaryroom = []
             diarypgdp.loadroom('madamroom')
             diarypgdp.updatepage(1)
             updatelist.append(diarypgdp)
@@ -649,12 +651,17 @@ class Gamesys():
   
             updatelist.append(dukeroomdiaryopen)
             time.sleep(0.2)
+            updatelist.append(diarypgdp)
+            currentdiaryroom = []
+            diarypgdp.loadroom('dukeroom')
+            diarypgdp.updatepage(0)
             while True:
                 self.whilerepeat()
                 if self.mouseclick == True and dukeroomdiaryopen.hover == False: 
                     break
-            
-            updatelist.remove(dukeroomdiaryopen)  
+
+            updatelist.remove(dukeroomdiaryopen)
+            updatelist.remove(diarypgdp)  
 
 
 

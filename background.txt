@@ -13,9 +13,3 @@ backgrounds/unlock.png
 backgrounds/stage1/dukeroomdoor.png
 backgrounds/stage1/orphanigedoor.png
 backgrounds/stage1/dukeroom.jpg
-backgrounds/madamroomtext/1.png
-backgrounds/madamroomtext/2.png
-backgrounds/madamroomtext/3.png
-backgrounds/madamroomtext/4.png
-backgrounds/madamroomtext/5.png
-backgrounds/madamroomtext/6.png
