@@ -95,7 +95,7 @@ class objects(pygame.sprite.Sprite):
         self.rect.y = y
         self.click = False
         self.assignment = False
-        self.response = 1
+        self.responses = [1,1]
         self.hover = False
 
     def update(self):
@@ -586,9 +586,10 @@ class Gamesys():
             updatelist.append(i)
 
     def waituntilmouserelease(self):
-        while self.mouseclick == False:
-            self.whilerepeat()
+        time.sleep(0.2)
         while self.mouseclick == True:
+            self.whilerepeat()
+        while self.mouseclick == False:
             self.whilerepeat()
         
     def madamroom(self):
