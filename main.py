@@ -1,5 +1,7 @@
 import pygame
 import time
+import  pygame_textinput
+from pygame_textinput import *
 
 pygame.init()
 pygame.font.init()
@@ -183,6 +185,24 @@ txtdis = textdisplay()
 txtdis.load(0)
 txtdis.renew(0)
 
+class enterpassclass(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        global textinputbox, events
+        events = pygame.event.get()
+        textinputbox = pygame_textinput.TextInput()
+    def unlock(self, anwser):
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                self.check(event.key)
+
+        #updatelist.remove(enterpass)
+        pass
+    def update(self):
+        #screen.blit(textinputbox.get_surface(),(50,50))
+        pass
+    def check(self,key)
+enterpass = enterpassclass()
 class diarypagedisplay(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -212,7 +232,7 @@ diarypgdp = diarypagedisplay()
 class Gamesys():
     def __init__(self):
 
-        global textbar, objectbar, updatelist, fadelist, menushow, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow, currenttyped
+        global textbar, objectbar, updatelist, fadelist, menushow, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow, currenttyped, enterpasslist
         global madamroomicon, dukeroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen, dukeroomobjects, dukeroomdiarycover, dukeroomdiaryopen, dukeroomnewspaper, dukeroomlockobjects #stage1
         global dukestudylockobjects, dukestudyobjects
         self.currentdisplayscene =[]
@@ -243,6 +263,7 @@ class Gamesys():
         dukeroomlockobjects = []
         dukestudylockobjects = []
         dukestudyobjects = []
+        enterpasslist = []
 
 
         madamroomicon = objects(0,800,5,80,45)
@@ -359,7 +380,6 @@ class Gamesys():
                 self.mouseclick = False
 
             if event.type == pygame.KEYDOWN:
-                print('keydown')
                 if event.key == pygame.K_ESCAPE:
                     print('Escape')
                     if self.menushow == 0:
@@ -389,7 +409,9 @@ class Gamesys():
         for currentdisplayscenesobject in currentdisplaybuttons:
             if currentdisplayscenesobject.click == True:
                     currentdisplayscenesobject.click = False
+                    self.roomtemp = currentdisplayscenesobject.assignment
                     self.execute('swapscene', currentdisplayscenesobject.assignment)
+                    
                
 
         for currentdiaries in diaries:
@@ -486,6 +508,18 @@ class Gamesys():
 
 
                 self.woodendoor()
+
+        elif type == 'enterpass':
+
+            while self.mouseclick != False:
+                self.whilerepeat()
+            for i in self.currentdisplayscene:
+                updatelist.remove(i)
+            bg.updateimage(11, 352, 0, 1568, 840)
+            bg.alpha = 255
+            self.currentdisplayscene = enterpasslist
+            enterpass.unlock(mission)
+            
     def currentstage01(self):
         self.currentstage == '01'
 
@@ -570,7 +604,7 @@ class Gamesys():
         print(updatelist)
         updatelist.append(txtdis)
         print('currentstage11')
-        self.currentstage12() #for debugging only
+        #self.currentstage12() #for debugging only
         self.execute('swapscene', 'swapmadamroom')
     def currentstage12(self):
         #unlocked duke room
@@ -612,7 +646,7 @@ class Gamesys():
             bg.detectmouse()
             if bg.hover == True and self.mouseclick == True:
                 txtdis.dpmultiline(5,7)
-                
+            self.execute('enterpass', 128)
 
             if self.currentdisplayscene != dukeroomlockobjects:
                 self.currentstage12()
