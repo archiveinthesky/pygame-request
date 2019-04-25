@@ -15,3 +15,6 @@ objects/scene1/diary/bluecover.png
 objects/scene1/diary/redopen.png
 objects/scene1/diary/leftarrow.png
 objects/scene1/diary/rightarrow.png
+objects/scene1/dukeroomicon.png
+objects/scene1/diary/blueopen.png
+objects/scene1/dukestudyicon.png

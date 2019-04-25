@@ -22,15 +22,10 @@ for obt in obtxt:
 global run
 run = True
 
-
-
-
 bgno = 0
 screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
 run = 1
 screenmode = 1
-
-
 
 textfont = pygame.font.Font("texts/brushpen.ttc", 40)
 
@@ -38,7 +33,6 @@ textfont = pygame.font.Font("texts/brushpen.ttc", 40)
 '''pygame.mixer.init()
 pygame.mixer.music.load('bgm.mp3')
 pygame.mixer.music.play()'''
-
 class background(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -65,6 +59,12 @@ class background(pygame.sprite.Sprite):
         self.rect.x = blitx
         self.rect.y = blity
 
+    def detectmouse(self):
+        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
+            self.hover = True
+        else:
+            self.hover = False
+
     def fadeout(self):
         self.alpha = self.alpha - 10
         self.update()
@@ -77,7 +77,6 @@ class background(pygame.sprite.Sprite):
 bg = background()
 bg.updateimage(2, 0, 0,0,0)
 bg.alpha = 255
-
 
 class objects(pygame.sprite.Sprite):
     def __init__(self, x, y, image, resizex, resizey):
@@ -136,6 +135,8 @@ startgame.alpha = 255
 menu = objects(550,150,1,766,887)
 menufullscreencheck = objects(1010,455,2,100,80)
 menufullscreencheckbox = objects(1010,455,3,80,80)
+
+
 menuleavegame = objects(730,550,4,450,180)
 
 
@@ -158,11 +159,11 @@ class textdisplay(pygame.sprite.Sprite):
     
     def update(self):
         if self.current == self.goal:
-            screen.blit(textfont.render(self.line, False, (255, 255, 255)),(0,850))
+            screen.blit(textfont.render(self.line, False, (150, 0, 0)),(0,850))
 
         else:
             self.current = self.current + 1
-            screen.blit(textfont.render(self.line[:self.current], False, (255, 255, 255)),(0,850))
+            screen.blit(textfont.render(self.line[:self.current], False, (150, 0, 0)),(0,850))
     
 
 
@@ -172,11 +173,38 @@ txtdis = textdisplay()
 
 txtdis.load(0)
 txtdis.renew(0)
+
+class diarypagedisplay(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        global currentdiaryroom
+        currentdiaryroom = []
+    def loadroom(self,room):
+
+        if room == 'madamroom':
+            for i in range(6):
+                pic = pygame.image.load('backgrounds/diarytext/' + str(i+1) + '.png')
+
+              
+                currentdiaryroom.append(pygame.transform.scale(pic,(1000,1000*pic.get_rect().size[1]//pic.get_rect().size[0])))
+        elif room == 'dukeroom':
+            pic = pygame.image.load('backgrounds/diarytext/' + str(1) + '.png')
+            currentdiaryroom.append((pygame.transform.scale(pic,(1000,1000*pic.get_rect().size[1]//pic.get_rect().size[0]))))
+        
+    def updatepage(self, pagenum):
+        print('length' + str(len(currentdiaryroom)))
+        self.image = currentdiaryroom[pagenum-1]
+    def update(self):
+        screen.blit(self.image, (550,200))
+diarypgdp = diarypagedisplay()
+
+
+
 class Gamesys():
     def __init__(self):
 
         global textbar, objectbar, updatelist, fadelist, menushow, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow, currenttyped
-        global madamroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen #stage1
+        global madamroomicon, dukeroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen, dukeroomobjects, dukeroomdiarycover, dukeroomdiaryopen, dukeroomnewspaper, dukeroomlockobjects #stage1
         self.currentdisplayscene =[]
         textbar = background()
         textbar.updateimage(0, 0, 840,1920,250)
@@ -186,7 +214,7 @@ class Gamesys():
 
 
         self.diarypage = 1
-
+        self.dukeroomlock = True
 
         self.currentstage = '00'
 
@@ -198,23 +226,31 @@ class Gamesys():
         currentdisplaybuttons = []
         currentsceneobjects = []
         woodendoorobjects = []
-
+        dukeroomobjects = []
+        dukeroomlockobjects = []
 
         madamroomicon = objects(0,800,5,80,45)
-        woodendooricon = objects(80,800,6,80,45)
+        dukeroomicon = objects(80, 800, 17, 80, 45)
+        woodendooricon = objects(160,800,6,80,45)
         madamroomicon.assign('swapmadamroom')
+        dukeroomicon.assign('swapdukeroom')
         woodendooricon.assign('swapwoodendoor')
         currentdisplaybuttons.append(madamroomicon)
+        currentdisplaybuttons.append(dukeroomicon)
         currentdisplaybuttons.append(woodendooricon)
 
+        
+        dukeroomdiarycover = objects(400,150,13,150,225)
+        dukeroomdiaryopen = objects(400, 50, 18, 1300, 800)
+        dukeroomobjects.append(dukeroomdiarycover)
 
-        madambox = objects(850,100,7,300,300)
+        madambox = objects(850,400,7,300,300)
         madambox.assignrespond(2)
-        madamlockbox1 = objects(500,200,8,250,150)
+        madamlockbox1 = objects(1550,430,8,90,45)
         madamlockbox1.assignrespond(3)
-        madamlockbox2 = objects(500,300,9,250,150)
+        madamlockbox2 = objects(1750,430,9,90,45)
         madamlockbox2.assignrespond(4)
-        madamroomdiarycover = objects(400, 150, 12, 150, 225)
+        madamroomdiarycover = objects(900, 300, 12, 100, 170)
         madamroomdiaryopen = objects(400, 50, 14, 1300, 800)
         madamroomobjects = []
         madamroomobjects.append(madambox)
@@ -222,12 +258,15 @@ class Gamesys():
         madamroomobjects.append(madamlockbox2)
         madamroomobjects.append(madamroomdiarycover)
         
+
+
         diaryleftarrow = objects(400, 700, 15, 200, 150)
         diaryrightarrow = objects(1500, 700, 16, 200, 150)
 
 
         diaries = []
         diaries.append(madamroomdiarycover)
+        diaries.append(dukeroomdiarycover)
 
 
         self.currentdisplayscene = madamroomobjects
@@ -243,9 +282,6 @@ class Gamesys():
             updatelist.append(startgame)
             fadelist.append(bg)
             fadelist.append(startgame)
-            if startgame.click == True:
-                #self.currentstage01()
-                pass
 
     def update(self):
         screen.fill((0,0,0))
@@ -254,7 +290,6 @@ class Gamesys():
         if startgame.click == True and self.currentstage == '00':
             startgame.click = False
             self.currentstage01()
-
 
         if self.menushow == 1:
             self.menu()
@@ -279,8 +314,6 @@ class Gamesys():
         updatelist.append(menufullscreencheckbox)
         screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
 
-    def updateevents(self):
-        pass
 
     def menu(self):
         if self.menufullscreen == False and menufullscreencheckbox.click == True:
@@ -336,16 +369,10 @@ class Gamesys():
                 pygame.quit()
                 exit()
 
-        for currentdisplayscenesobjectclick in currentdisplaybuttons:
-            if currentdisplayscenesobjectclick.click == True:
-                if currentdisplayscenesobjectclick == madamroomicon:
-                    print('madamroomicon click')
-                    currentdisplayscenesobjectclick.click = False
-                    self.execute('swapscene', currentdisplayscenesobjectclick.assignment)
-                elif currentdisplayscenesobjectclick == woodendooricon:
-                    print('woodendoor click')
-                    currentdisplayscenesobjectclick.click = False
-                    self.execute('swapscene', currentdisplayscenesobjectclick.assignment)
+        for currentdisplayscenesobject in currentdisplaybuttons:
+            if currentdisplayscenesobject.click == True:
+                currentdisplayscenesobject.click = False
+                self.execute('swapscene', currentdisplayscenesobject.assignment)
 
         for currentdiaries in diaries:
             if currentdiaries.click == True:
@@ -354,10 +381,7 @@ class Gamesys():
                 currentdiaries.click = False
                 print(currentdiaries.click)
                 self.diary(currentdiaries)
-                
-
-
-                
+                                
 
         self.update()
         pygame.display.update()
@@ -376,6 +400,30 @@ class Gamesys():
                 for i in madamroomobjects:
                     updatelist.append(i)
                 self.madamroom()
+            elif mission == 'swapdukeroom':
+                if self.dukeroomlock == True: 
+                    time.sleep(0.2)
+                    while self.mouseclick != False:
+                        self.whilerepeat()
+                    for i in self.currentdisplayscene:
+                        updatelist.remove(i)
+                    bg.updateimage(12, 352, 0, 1568, 840)
+                    bg.alpha = 255
+                    self.currentdisplayscene = dukeroomlockobjects
+                    for i in dukeroomlockobjects:
+                        updatelist.append(i)
+                    self.dukeroomlocked()
+                else:
+                    while self.mouseclick != False:
+                        self.whilerepeat()
+                    for i in self.currentdisplayscene:
+                        updatelist.remove(i)
+                    bg.updateimage(14, 352, 0, 1568, 840)
+                    bg.alpha = 255
+                    self.currentdisplayscene = dukestudyobjects
+                    for i in dukestudyobjects:
+                        updatelist.append(i)
+                    self.dukestudy() 
             elif mission == 'swapwoodendoor':
                 while self.mouseclick != False:
                     self.whilerepeat()
@@ -384,7 +432,7 @@ class Gamesys():
                     updatelist.remove(i)
                     print('removing')
                     print(i)
-                bg.updateimage(8,352,0,1568,840)
+                bg.updateimage(13,352,0,1568,840)
                 print('bgupdateimage')
                 bg.alpha = 255
                 self.currentdisplayscene = woodendoorobjects
@@ -410,7 +458,7 @@ class Gamesys():
             screen.fill((0, 0, 0))
             self.fadein()
             pygame.display.update()
-        for i in range(0):
+        for i in range(300):
             self.whilerepeat()
         for i in range(30):
             screen.fill((0, 0, 0))
@@ -423,13 +471,14 @@ class Gamesys():
         bg.updateimage(4, 0, 0, 0, 0)
         updatelist.append(textbar)
         fadelist.append(textbar)
-
+        #down to lines are from current stage 02
+        txtdis.renew(15)
+        updatelist.append(txtdis)
         for i in range(30):
             screen.fill((0, 0, 0))
             self.fadein()
             pygame.display.update()
-        txtdis.renew(15)
-        updatelist.append(txtdis)
+        #cutted into main
         self.whilerepeat()
         while self.mouseclick == False:
             self.whilerepeat()
@@ -585,9 +634,12 @@ class Gamesys():
             self.fadeout()
             self.whilerepeat()
         bg.updateimage(8,0,0,0,0)
-
         self.currentstage = '10'
         self.currentstage10()
+
+
+      
+    
 
     def currentstage10(self):
         print('Entering Escape')
@@ -613,14 +665,14 @@ class Gamesys():
         bg.updateimage(10,352,0,1568,840)
         txtdis.load(1)
         txtdis.renew(1)
+        
         print('currentstage10')
         self.currentstage11()
     def currentstage11(self):
 
         updatelist.append(textbar)
         updatelist.append(objectbar)
-        updatelist.append(madamroomicon)
-        updatelist.append(woodendooricon)
+        self.updateicons()
         fadelist.append(textbar)
         fadelist.append(objectbar)
         fadelist.append(madamroomicon)
@@ -635,8 +687,24 @@ class Gamesys():
         print(updatelist)
         updatelist.append(txtdis)
         print('currentstage11')
+        self.currentstage12() #for debugging only
         self.execute('swapscene', 'swapmadamroom')
+    def currentstage12(self):
+        #unlocked duke room
+        self.currentstage = '12'
+        self.dukeroomlock = False
+        global dukestudyicon
+        dukestudyicon = objects(240,800,19,80,45)
+        updatelist.append(dukestudyicon)
+    def updateicons(self):
+        for i in currentdisplaybuttons:
+            updatelist.append(i)
 
+    def waituntilmouserelease(self):
+        while self.mouseclick == False:
+            self.whilerepeat()
+        while self.mouseclick == True:
+            self.whilerepeat()
         
     def madamroom(self):
         print('madamroom')
@@ -649,9 +717,41 @@ class Gamesys():
                 if i.click == True:
                     print('True')
                     i.respond()
-                else:
-                    pass
+
                     #print('false respond')
+    def dukeroomlocked(self):
+
+        while True:
+            self.whilerepeat()
+            bg.detectmouse()
+            if bg.hover == True and self.mouseclick == True:
+                self.mouseclick = False
+                txtdis.renew(5)
+                self.waituntilmouserelease()
+                txtdis.renew(6)
+                self.waituntilmouserelease()
+                txtdis.renew(7)
+                self.waituntilmouserelease()
+                txtdis.renew(1)
+                self.waituntilmouserelease
+                
+
+            if self.currentdisplayscene != dukeroomlockobjects:
+                self.currentstage12()
+                break
+
+    def dukeroom(self):
+        while True:
+            self.whilerepeat()
+            if self.currentdisplayscene != dukeroomobjects:
+                break
+            for i in dukeroomobjects:
+                if i.click == True:
+                    print('True')
+                    i.respond()
+
+        
+
     def woodendoor(self):
         while True:
             self.whilerepeat()
@@ -665,32 +765,54 @@ class Gamesys():
             updatelist.append(madamroomdiaryopen)
             updatelist.append(diaryleftarrow)
             updatelist.append(diaryrightarrow)
+            currentdiaryroom = []
+            diarypgdp.loadroom('madamroom')
+            diarypgdp.updatepage(1)
+            updatelist.append(diarypgdp)
             time.sleep(0.2)
             while True:
                 self.whilerepeat()
                 if diaryrightarrow.click == True:
-                    if self.diarypage == 6:
-                        self.diarypage = 1
+                    if self.diarypage == 5:
+                        self.diarypage = 0
                     else:
                         self.diarypage = self.diarypage + 1
                     print(self.diarypage)
                     while self.mouseclick != False:
                         self.whilerepeat()
+                    diarypgdp.updatepage(self.diarypage)
                 elif diaryleftarrow.click == True:
-                    if self.diarypage == 1:
-                        self.diarypage = 6
+                    if self.diarypage == 0:
+                        self.diarypage = 5
                     else:
                         self.diarypage = self.diarypage - 1
                     print(self.diarypage)
                     while self.mouseclick != False:
                         self.whilerepeat()
-                
-                if self.mouseclick == True and madamroomdiaryopen.hover == False: #and diaryleftarrow.hover == False and diaryrightarrow.hover == False:
+                    diarypgdp.updatepage(self.diarypage)
+                if self.mouseclick == True and madamroomdiaryopen.hover == False: 
                     break
             
             updatelist.remove(madamroomdiaryopen)  
             updatelist.remove(diaryleftarrow)
             updatelist.remove(diaryrightarrow)
+            updatelist.remove(diarypgdp)
+        if room == dukeroomdiarycover:
+  
+            updatelist.append(dukeroomdiaryopen)
+            time.sleep(0.2)
+            updatelist.append(diarypgdp)
+            currentdiaryroom = []
+            diarypgdp.loadroom('dukeroom')
+            diarypgdp.updatepage(0)
+            while True:
+                self.whilerepeat()
+                if self.mouseclick == True and dukeroomdiaryopen.hover == False: 
+                    break
+
+            updatelist.remove(dukeroomdiaryopen)
+            updatelist.remove(diarypgdp)  
+
 
 
 
