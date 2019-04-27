@@ -215,7 +215,7 @@ class enterpassclass(pygame.sprite.Sprite):
         txtdis.simplerender(1000,700,255,255,255, self.entered)
     def check(self,key):
         self.enterkey = ''
-        if key == 13:
+        if key == 13 or key == 271:
             print('enter')
             self.enterpress = True
         elif key >=48 and key <= 57:
