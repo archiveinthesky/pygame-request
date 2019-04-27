@@ -175,7 +175,9 @@ class textdisplay(pygame.sprite.Sprite):
         else:
             self.current = self.current + 1
             screen.blit(textfont.render(self.line[:self.current], False, (150, 0, 0)),(0,850))
-    
+
+    def simplerender(self, x, y, r, g, b, text):
+        screen.blit(textfont.render(str(text), False, (r, g, b)),(x,y))
 
 
 
@@ -191,17 +193,41 @@ class enterpassclass(pygame.sprite.Sprite):
         global textinputbox, events
         events = pygame.event.get()
         textinputbox = pygame_textinput.TextInput()
+        self.enterpress = False
+        self.entered = ''
+        self.enterkey = ''
+        self.numbers = [0,1,2,3,4,5,6,7,8,9]
+        self.letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
     def unlock(self, anwser):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                self.check(event.key)
-
-        #updatelist.remove(enterpass)
+        while self.enterpress == False:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    self.check(event.key)
+            system.whilerepeat()
+        updatelist.remove(enterpass)
+        if self.entered == str(anwser):
+            return 'pass'
+        else:
+            return 'notpass'
+        
         pass
     def update(self):
-        #screen.blit(textinputbox.get_surface(),(50,50))
-        pass
-    def check(self,key)
+        txtdis.simplerender(1000,700,255,255,255, self.entered)
+    def check(self,key):
+        self.enterkey = ''
+        if key == 13:
+            print('enter')
+            self.enterpress = True
+        elif key >=48 and key <= 57:
+            self.enterkey = self.numbers[key-48]
+        elif key >=256 and key <= 265:
+            self.enterkey = self.numbers[key-256]
+        elif key >= 97 and key <= 122:
+            self.enterkey = self.letters[key-97]
+        elif key == 8:
+            self.entered = self.entered[:len(self.enterkey)-1]
+        self.entered = str(self.entered) + str(self.enterkey)
+
 enterpass = enterpassclass()
 class diarypagedisplay(pygame.sprite.Sprite):
     def __init__(self):
@@ -408,9 +434,9 @@ class Gamesys():
 
         for currentdisplayscenesobject in currentdisplaybuttons:
             if currentdisplayscenesobject.click == True:
-                    currentdisplayscenesobject.click = False
-                    self.roomtemp = currentdisplayscenesobject.assignment
-                    self.execute('swapscene', currentdisplayscenesobject.assignment)
+                currentdisplayscenesobject.click = False
+                self.roomtemp = currentdisplayscenesobject.assignment
+                self.execute('swapscene', currentdisplayscenesobject.assignment)
                     
                
 
@@ -518,7 +544,11 @@ class Gamesys():
             bg.updateimage(11, 352, 0, 1568, 840)
             bg.alpha = 255
             self.currentdisplayscene = enterpasslist
-            enterpass.unlock(mission)
+            updatelist.append(enterpass)
+            if enterpass.unlock(mission) == 'pass':
+                return(True)
+            else:
+                return(False)
             
     def currentstage01(self):
         self.currentstage == '01'
@@ -615,6 +645,8 @@ class Gamesys():
         dukestudyicon.assign('swapdukestudy')
         updatelist.append(dukestudyicon)
         currentdisplaybuttons.append(dukestudyicon)
+        self.execute('swapscene', 'swapdukeroom')
+
     def updateicons(self):
         for i in currentdisplaybuttons:
             updatelist.append(i)
@@ -646,10 +678,13 @@ class Gamesys():
             bg.detectmouse()
             if bg.hover == True and self.mouseclick == True:
                 txtdis.dpmultiline(5,7)
-            self.execute('enterpass', 128)
+                if self.execute('enterpass', 128) == True:
+                    txtdis.dpmultiline(8,8)
+                    self.currentstage12()
+                else:
+                    self.execute('swapscene', 'swapdukeroom')
 
             if self.currentdisplayscene != dukeroomlockobjects:
-                self.currentstage12()
                 break
 
     def dukeroom(self):
