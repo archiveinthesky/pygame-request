@@ -1,7 +1,5 @@
 import pygame
 import time
-import  pygame_textinput
-from pygame_textinput import *
 
 pygame.init()
 pygame.font.init()
@@ -21,8 +19,7 @@ objs = []
 for obt in obtxt:
     obs.append(pygame.image.load(obt))
 
-global run
-run = True
+
 
 bgno = 0
 screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
@@ -189,7 +186,6 @@ txtdis.renew(0)
 class enterpassclass(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        events = pygame.event.get()
         self.enterpress = False
         self.entered = ''
         self.enterkey = ''
@@ -232,8 +228,7 @@ enterpass = enterpassclass()
 class diarypagedisplay(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        global currentdiaryroom
-        currentdiaryroom = []
+        self.currentdiaryroom = []
     def loadroom(self,room):
 
         if room == 'madamroom':
@@ -241,14 +236,14 @@ class diarypagedisplay(pygame.sprite.Sprite):
                 pic = pygame.image.load('backgrounds/diarytext/' + str(i+1) + '.png')
 
               
-                currentdiaryroom.append(pygame.transform.scale(pic,(1000,1000*pic.get_rect().size[1]//pic.get_rect().size[0])))
+                self.currentdiaryroom.append(pygame.transform.scale(pic,(1000,1000*pic.get_rect().size[1]//pic.get_rect().size[0])))
         elif room == 'dukeroom':
             pic = pygame.image.load('backgrounds/diarytext/' + str(1) + '.png')
-            currentdiaryroom.append((pygame.transform.scale(pic,(1000,1000*pic.get_rect().size[1]//pic.get_rect().size[0]))))
+            self.currentdiaryroom.append((pygame.transform.scale(pic,(1000,1000*pic.get_rect().size[1]//pic.get_rect().size[0]))))
         
     def updatepage(self, pagenum):
-        print('length' + str(len(currentdiaryroom)))
-        self.image = currentdiaryroom[pagenum-1]
+        print('length' + str(len(self.currentdiaryroom)))
+        self.image = self.currentdiaryroom[pagenum-1]
     def update(self):
         screen.blit(self.image, (550,200))
 diarypgdp = diarypagedisplay()
@@ -258,8 +253,8 @@ diarypgdp = diarypagedisplay()
 class Gamesys():
     def __init__(self):
 
-        global textbar, objectbar, updatelist, fadelist, menushow, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow, currenttyped, enterpasslist
-        global madamroomicon, dukeroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen, dukeroomobjects, dukeroomdiarycover, dukeroomdiaryopen, dukeroomnewspaper, dukeroomlockobjects #stage1
+        global textbar, objectbar, updatelist, fadelist, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow, enterpasslist
+        global madamroomicon, dukeroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen, dukeroomobjects, dukeroomdiarycover, dukeroomdiaryopen, dukeroomlockobjects #stage1
         global dukestudylockobjects, dukestudyobjects
         self.currentdisplayscene =[]
         textbar = background()
@@ -393,7 +388,6 @@ class Gamesys():
             menufullscreencheck.click = False
             time.sleep(0.2)
         if menuleavegame.click == True:
-            run = False
             pygame.quit()
             exit()
 
@@ -429,12 +423,8 @@ class Gamesys():
                         self.whilerepeat()
 
             if event.type == pygame.QUIT:
-                run = False
                 pygame.quit()
-                try:
-                    exit()
-                except None:
-                    pass
+                exit()
 
         for currentdisplayscenesobject in currentdisplaybuttons:
             if currentdisplayscenesobject.click == True:
@@ -726,7 +716,7 @@ class Gamesys():
             updatelist.append(madamroomdiaryopen)
             updatelist.append(diaryleftarrow)
             updatelist.append(diaryrightarrow)
-            currentdiaryroom = []
+            diarypgdp.currentdiaryroom = []
             diarypgdp.loadroom('madamroom')
             diarypgdp.updatepage(1)
             updatelist.append(diarypgdp)
@@ -763,7 +753,7 @@ class Gamesys():
             updatelist.append(dukeroomdiaryopen)
             time.sleep(0.2)
             updatelist.append(diarypgdp)
-            currentdiaryroom = []
+            diarypgdp.currentdiaryroom = []
             diarypgdp.loadroom('dukeroom')
             diarypgdp.updatepage(0)
             while True:
@@ -783,7 +773,7 @@ system = Gamesys()
 
 system.currentstagedetect()
 clock.tick(60)
-while run:
+while True:
     system.whilerepeat()
 
     #vscode is testing
