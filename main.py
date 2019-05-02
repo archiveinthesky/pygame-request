@@ -269,6 +269,7 @@ class Gamesys():
         self.diarypage = 1
         self.dukeroomlock = True
         self.dukestudylock = True
+        self.getaxe = False
 
         self.currentstage = '00'
 
@@ -391,9 +392,7 @@ class Gamesys():
             pygame.quit()
             exit()
 
-
-    def whilerepeat(self):
-        clock.tick(60)
+    def eventupdate(self):
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.mouseclick = True
@@ -425,6 +424,10 @@ class Gamesys():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+
+    def whilerepeat(self):
+        clock.tick(60)
+        self.eventupdate()
 
         for currentdisplayscenesobject in currentdisplaybuttons:
             if currentdisplayscenesobject.click == True:
@@ -590,7 +593,9 @@ class Gamesys():
         for i in range(30):
             screen.fill((0, 0, 0))
             self.fadein()
-            self.whilerepeat()
+            self.eventupdate()
+            self.update()
+            pygame.display.update()
 
         for i in self.currentdisplayscene:
             updatelist.append(i)
@@ -616,6 +621,10 @@ class Gamesys():
         self.currentstage = '13'
         self.dukestudylock = False
         self.execute('swapscene', 'swapdukestudy')
+    
+    def currentstage14(self):
+        self.currentstage = '14'
+        #needs more shit, 8 tombs will be passed
     def updateicons(self):
         for i in currentdisplaybuttons:
             updatelist.append(i)
@@ -703,13 +712,16 @@ class Gamesys():
     
 
     def woodendoor(self):
-        while True:
-            self.whilerepeat()
-            bg.detectmouse()
-            if bg.hover == True and self.mouseclick == True:
-                txtdis.dpmultiline(10, 11)            
-            if self.currentdisplayscene != woodendoorobjects:
-                break
+        if self.getaxe == True:
+            self.currentstage14()
+        else: 
+            while True:
+                self.whilerepeat()
+                bg.detectmouse()
+                if bg.hover == True and self.mouseclick == True:
+                    txtdis.dpmultiline(10, 11)            
+                if self.currentdisplayscene != woodendoorobjects:
+                    break
     def diary(self, room):
         if room == madamroomdiarycover:
   
