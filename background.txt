@@ -14,3 +14,5 @@ backgrounds/stage1/dukeroomdoor.png
 backgrounds/stage1/orphanigedoor.png
 backgrounds/stage1/dukeroom.png
 backgrounds/stage1/study.png
+backgrounds/stage1/dirtroad.png
+backgrounds/stage1/orphanigeroom2.png

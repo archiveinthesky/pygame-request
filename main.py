@@ -255,7 +255,7 @@ class Gamesys():
 
         global textbar, objectbar, updatelist, fadelist, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow, enterpasslist
         global madamroomicon, dukeroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen, dukeroomobjects, dukeroomdiarycover, dukeroomdiaryopen, dukeroomlockobjects #stage1
-        global dukestudylockobjects, dukestudyobjects, dukestudyaxe
+        global dukestudylockobjects, dukestudyobjects, dukestudyaxe, leaderroomobjects
         self.currentdisplayscene =[]
         textbar = background()
         textbar.updateimage(0, 0, 840, 1920, 250)
@@ -286,6 +286,7 @@ class Gamesys():
         dukestudylockobjects = []
         dukestudyobjects = []
         enterpasslist = []
+        leaderroomobjects = []
 
 
         madamroomicon = objects(0, 800, 5, 80, 45)
@@ -505,6 +506,11 @@ class Gamesys():
                 self.update()
                 pygame.display.update()
                 self.woodendoor()
+            elif mission == 'swapleaderroom':
+                bg.updateimage(13, 352, 0, 1568, 840)
+                bg.alpha=255
+                self.currentdisplayscene = leaderroomobjects
+                self.leaderroom()
 
         elif type == 'enterpass':
 
@@ -628,6 +634,16 @@ class Gamesys():
     
     def currentstage14(self):
         self.currentstage = '14'
+        global leadericon
+        leadericon = objects(300, 800, 19, 80, 45)
+        dukestudyicon.assign('swapleaderroom')
+        updatelist.append(leadericon)
+        currentdisplaybuttons.append(leadericon)
+        bg.updateimage(16, 352, 0, 1568, 840)
+        txtdis.dpmultiline(12,15)
+        self.execute('swaproom', 'swapleaderroom')
+
+        
         #needs more shit, 8 tombs will be passed by script
     def updateicons(self):
         for i in currentdisplaybuttons:
@@ -729,6 +745,11 @@ class Gamesys():
                     txtdis.dpmultiline(10, 11)            
                 if self.currentdisplayscene != woodendoorobjects:
                     break
+    def leaderroom(self):
+        while True:
+            self.whilerepeat()
+            if self.currentdisplayscene != leaderroomobjects:
+                break
     def diary(self, room):
         if room == madamroomdiarycover:
   
