@@ -238,7 +238,7 @@ class diarypagedisplay(pygame.sprite.Sprite):
               
                 self.currentdiaryroom.append(pygame.transform.scale(pic, (1000, 1000*pic.get_rect().size[1]//pic.get_rect().size[0])))
         elif room == 'dukeroom':
-            pic = pygame.image.load('backgrounds/diarytext/' + str(1) + '.png')
+            pic = pygame.image.load('backgrounds/diarytext/dukediary.png' )
             self.currentdiaryroom.append((pygame.transform.scale(pic, (1000, 1000*pic.get_rect().size[1]//pic.get_rect().size[0]))))
         
     def updatepage(self, pagenum):
@@ -255,7 +255,7 @@ class Gamesys():
 
         global textbar, objectbar, updatelist, fadelist, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow, enterpasslist
         global madamroomicon, dukeroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen, dukeroomobjects, dukeroomdiarycover, dukeroomdiaryopen, dukeroomlockobjects #stage1
-        global dukestudylockobjects, dukestudyobjects
+        global dukestudylockobjects, dukestudyobjects, dukestudyaxe
         self.currentdisplayscene =[]
         textbar = background()
         textbar.updateimage(0, 0, 840, 1920, 250)
@@ -299,11 +299,11 @@ class Gamesys():
         currentdisplaybuttons.append(woodendooricon)
 
 
-        
+        #dukeroomstuff
         dukeroomdiarycover = objects(1200, 450, 13, 100, 170)
         dukeroomdiaryopen = objects(400, 50, 18, 1300, 800)
         dukeroomobjects.append(dukeroomdiarycover)
-
+        #madamroom stuff
         madambox = objects(850, 400, 7, 300, 300)
         madambox.assignrespond(2, 2)
         madamlockbox1 = objects(1550, 430, 8, 90, 45)
@@ -317,7 +317,9 @@ class Gamesys():
         madamroomobjects.append(madamlockbox1)
         madamroomobjects.append(madamlockbox2)
         madamroomobjects.append(madamroomdiarycover)
-        
+        #dukestudystuff
+        dukestudyaxe = objects(1000,700,20,300,100)        
+        dukestudyobjects.append(dukestudyaxe)
 
 
         diaryleftarrow = objects(400, 700, 15, 200, 150)
@@ -524,7 +526,7 @@ class Gamesys():
 
         updatelist.remove(startgame)
         fadelist.remove(startgame)
-        for i in range(30):
+        """for i in range(30):
             screen.fill((0, 0, 0))
             self.fadeout()
             pygame.display.update()
@@ -539,6 +541,7 @@ class Gamesys():
             screen.fill((0, 0, 0))
             self.fadeout()
             pygame.display.update()
+        """
         self.currentstage02()
 
     def currentstage02(self):
@@ -559,7 +562,7 @@ class Gamesys():
         bg.updateimage(9, 0, 0, 0, 0)
         updatelist.remove(textbar)
         updatelist.remove(txtdis)
-        for i in range(25):
+        """for i in range(25):
             screen.fill((0, 0, 0))
             bg.alpha = bg.alpha + i * 25.5
             self.whilerepeat()
@@ -574,7 +577,7 @@ class Gamesys():
         objectbar.alpha = -45
         madamroomicon.alpha = -45
         woodendooricon.alpha = -45
-        bg.updateimage(10, 352, 0, 1568, 840)
+        bg.updateimage(10, 352, 0, 1568, 840)"""
         txtdis.load(1)
         txtdis.renew(1)
         
@@ -596,13 +599,14 @@ class Gamesys():
             self.eventupdate()
             self.update()
             pygame.display.update()
-
+        
         for i in self.currentdisplayscene:
             updatelist.append(i)
         print(updatelist)
+        print(textbar.alpha)
         updatelist.append(txtdis)
         print('currentstage11')
-        #self.currentstage12() #for debugging only
+        
         self.execute('swapscene', 'swapmadamroom')
     
     def currentstage12(self):
@@ -624,7 +628,7 @@ class Gamesys():
     
     def currentstage14(self):
         self.currentstage = '14'
-        #needs more shit, 8 tombs will be passed
+        #needs more shit, 8 tombs will be passed by script
     def updateicons(self):
         for i in currentdisplaybuttons:
             updatelist.append(i)
@@ -705,10 +709,13 @@ class Gamesys():
             self.whilerepeat()
             if self.currentdisplayscene != dukestudyobjects:
                 break
+            if self.getaxe == False and dukestudyaxe.click == True:
+                self.getaxe == True
             for i in dukestudyobjects:
                 if i.click == True:
                     print('True')
                     i.respond()
+
     
 
     def woodendoor(self):
