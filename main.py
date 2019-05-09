@@ -240,7 +240,9 @@ class diarypagedisplay(pygame.sprite.Sprite):
         elif room == 'dukeroom':
             pic = pygame.image.load('backgrounds/diarytext/dukediary.png' )
             self.currentdiaryroom.append((pygame.transform.scale(pic, (1000, 1000*pic.get_rect().size[1]//pic.get_rect().size[0]))))
-        
+        elif room == 'leaderroom':
+            pic = pygame.image.load('backgrounds/diarytext/leadderroom.png' )
+            self.currentdiaryroom.append((pygame.transform.scale(pic, (1000, 1000*pic.get_rect().size[1]//pic.get_rect().size[0]))))
     def updatepage(self, pagenum):
         print('length' + str(len(self.currentdiaryroom)))
         self.image = self.currentdiaryroom[pagenum-1]
@@ -255,7 +257,7 @@ class Gamesys():
 
         global textbar, objectbar, updatelist, fadelist, currentdisplayscenes, currentdisplaybuttons, currentsceneobjects, diaries, diaryleftarrow, diaryrightarrow, enterpasslist
         global madamroomicon, dukeroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen, dukeroomobjects, dukeroomdiarycover, dukeroomdiaryopen, dukeroomlockobjects #stage1
-        global dukestudylockobjects, dukestudyobjects, dukestudyaxe, leaderroomobjects
+        global dukestudylockobjects, dukestudyobjects, dukestudyaxe, leaderroomobjects, leaderroomdiarycover, leaderroomdiaryopen
         self.currentdisplayscene =[]
         textbar = background()
         textbar.updateimage(0, 0, 840, 1920, 250)
@@ -321,7 +323,11 @@ class Gamesys():
         #dukestudystuff
         dukestudyaxe = objects(1006,518,20,82,150)        
         dukestudyobjects.append(dukestudyaxe)
+        dukestudyaxe.assignrespond(29,29)
 
+        leaderroomdiarycover = objects(733, 475, 12, 100, 170)
+        leaderroomdiaryopen = objects(400, 50, 14, 1300, 800)
+        leaderroomobjects.append(leaderroomdiarycover)
 
         diaryleftarrow = objects(400, 700, 15, 200, 150)
         diaryrightarrow = objects(1500, 700, 16, 200, 150)
@@ -330,7 +336,7 @@ class Gamesys():
         diaries = []
         diaries.append(madamroomdiarycover)
         diaries.append(dukeroomdiarycover)
-
+        #diaries.append(leaderroomdiarycover)
 
         self.currentdisplayscene = madamroomobjects
 
@@ -638,7 +644,7 @@ class Gamesys():
         bg.updateimage(16, 352, 0, 1568, 840)
         self.update()
         pygame.display.update()
-        txtdis.dpmultiline(12,15)
+        txtdis.dpmultiline(14,28)
         global leadericon
         leadericon = objects(0, 800, 21, 80, 45)
         dukestudyicon.assign('swapleaderroom')
@@ -762,10 +768,12 @@ class Gamesys():
                 if self.currentdisplayscene != woodendoorobjects:
                     break
     def leaderroom(self):
-        while True:
+        for i in leaderroomobjects:
+            updatelist.append(i)
+        while leaderroomdiarycover.click != True:
             self.whilerepeat()
-            if self.currentdisplayscene != leaderroomobjects:
-                break
+        self.diary(leaderroomdiarycover)
+            
     def diary(self, room):
         if room == madamroomdiarycover:
   
@@ -819,6 +827,17 @@ class Gamesys():
 
             updatelist.remove(dukeroomdiaryopen)
             updatelist.remove(diarypgdp)  
+        if room == leaderroomdiarycover:
+            updatelist.append(leaderroomdiaryopen)
+            time.sleep(0.2)
+            updatelist.append(diarypgdp)
+            diarypgdp.currentdiaryroom = []
+            diarypgdp.loadroom('leaderroom')
+            diarypgdp.updatepage(0)
+            while True:
+                self.whilerepeat()
+                if self.mouseclick == True and dukeroomdiaryopen.hover == False: 
+                    break
 
 
 
