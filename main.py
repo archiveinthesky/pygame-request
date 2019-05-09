@@ -325,8 +325,8 @@ class Gamesys():
         dukestudyobjects.append(dukestudyaxe)
         dukestudyaxe.assignrespond(29,29)
 
-        leaderroomdiarycover = objects(733, 475, 12, 100, 170)
-        leaderroomdiaryopen = objects(400, 50, 14, 1300, 800)
+        leaderroomdiarycover = objects(733, 475, 22, 100, 170)
+        leaderroomdiaryopen = objects(400, 50, 23, 1300, 800)
         leaderroomobjects.append(leaderroomdiarycover)
 
         diaryleftarrow = objects(400, 700, 15, 200, 150)
@@ -644,7 +644,7 @@ class Gamesys():
         bg.updateimage(16, 352, 0, 1568, 840)
         self.update()
         pygame.display.update()
-        txtdis.dpmultiline(14,28)
+        #txtdis.dpmultiline(14,28)
         global leadericon
         leadericon = objects(0, 800, 21, 80, 45)
         dukestudyicon.assign('swapleaderroom')

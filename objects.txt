@@ -20,3 +20,5 @@ objects/scene1/diary/blueopen.png
 objects/scene1/dukestudyicon.png
 objects/scene1/axe.png
 objects/scene1/orphangeleadericon.png
+objects/scene1/diary/browncover.png
+objects/scene1/diary/brownopen.png
