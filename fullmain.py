@@ -822,7 +822,7 @@ class Gamesys():
             bg.detectmouse()
             if bg.hover == True and self.mouseclick == True:
                 txtdis.dpmultiline(5, 7)
-                if self.execute('enterpass', 128) == True:
+                if self.execute('enterpass', '0128') == True:
                     bg.updateimage(12, 352, 0, 1568, 840)
                     self.whilerepeat()
                     txtdis.dpmultiline(8, 8)
@@ -881,6 +881,7 @@ class Gamesys():
     
 
     def woodendoor(self):
+        self.waituntilmouserelease()
         if self.getaxe == True:
             self.currentstage14()
         else: 
