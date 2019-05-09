@@ -264,7 +264,7 @@ class Gamesys():
         objectbar.updateimage(1, 0, 0, 360, 800)
 
 
-        
+        self.mousefollowbg =  pygame.transform.scale(pygame.image.load('objects/cursor/background.png'),(200,100))
 
         self.diarypage = 1
         self.dukeroomlock = True
@@ -319,7 +319,7 @@ class Gamesys():
         madamroomobjects.append(madamlockbox2)
         madamroomobjects.append(madamroomdiarycover)
         #dukestudystuff
-        dukestudyaxe = objects(1000,700,20,300,100)        
+        dukestudyaxe = objects(1006,518,20,82,150)        
         dukestudyobjects.append(dukestudyaxe)
 
 
@@ -356,7 +356,7 @@ class Gamesys():
 
         if self.menushow == 1:
             self.menu()
-
+        self.mousefollow()
     def fadeout(self):
         for fadeoutobjects in fadelist:
             fadeoutobjects.fadeout()
@@ -507,7 +507,7 @@ class Gamesys():
                 pygame.display.update()
                 self.woodendoor()
             elif mission == 'swapleaderroom':
-                bg.updateimage(13, 352, 0, 1568, 840)
+                bg.updateimage(17, 352, 0, 1568, 840)
                 bg.alpha=255
                 self.currentdisplayscene = leaderroomobjects
                 self.leaderroom()
@@ -612,7 +612,8 @@ class Gamesys():
         print(textbar.alpha)
         updatelist.append(txtdis)
         print('currentstage11')
-        
+        self.currentstage12()#debugging only"""
+        self.currentstage13()
         self.execute('swapscene', 'swapmadamroom')
     
     def currentstage12(self):
@@ -634,14 +635,21 @@ class Gamesys():
     
     def currentstage14(self):
         self.currentstage = '14'
+        bg.updateimage(16, 352, 0, 1568, 840)
+        self.update()
+        pygame.display.update()
+        txtdis.dpmultiline(12,15)
         global leadericon
-        leadericon = objects(300, 800, 19, 80, 45)
+        leadericon = objects(0, 800, 21, 80, 45)
         dukestudyicon.assign('swapleaderroom')
+        updatelist.remove(madamroomicon)
+        updatelist.remove(dukeroomicon)
+        updatelist.remove(dukestudyicon)
+        updatelist.remove(woodendooricon)
+
         updatelist.append(leadericon)
         currentdisplaybuttons.append(leadericon)
-        bg.updateimage(16, 352, 0, 1568, 840)
-        txtdis.dpmultiline(12,15)
-        self.execute('swaproom', 'swapleaderroom')
+        self.execute('swapscene', 'swapleaderroom')
 
         
         #needs more shit, 8 tombs will be passed by script
@@ -656,6 +664,11 @@ class Gamesys():
         while self.mouseclick == False:
             self.whilerepeat()
         
+    def mousefollow(self):
+        screen.blit(self.mousefollowbg, (int(pygame.mouse.get_pos()[0]),int(pygame.mouse.get_pos()[1])))
+        txtdis.simplerender(pygame.mouse.get_pos()[0],pygame.mouse.get_pos()[1],255,255,255,str(str(pygame.mouse.get_pos()[0]) + "," + str(pygame.mouse.get_pos()[1])))
+
+
     def madamroom(self):
         print('madamroom')
         while True:
@@ -676,7 +689,7 @@ class Gamesys():
             bg.detectmouse()
             if bg.hover == True and self.mouseclick == True:
                 txtdis.dpmultiline(5, 7)
-                if self.execute('enterpass', 128) == True:
+                if self.execute('enterpass', '0128') == True:
                     bg.updateimage(12, 352, 0, 1568, 840)
                     self.whilerepeat()
                     txtdis.dpmultiline(8, 8)
@@ -725,16 +738,19 @@ class Gamesys():
             self.whilerepeat()
             if self.currentdisplayscene != dukestudyobjects:
                 break
-            if self.getaxe == False and dukestudyaxe.click == True:
-                self.getaxe == True
+                
             for i in dukestudyobjects:
                 if i.click == True:
+                    if i == dukestudyaxe and self.getaxe == False:
+                        self.getaxe = True
                     print('True')
                     i.respond()
 
     
 
     def woodendoor(self):
+        
+        self.waituntilmouserelease()
         if self.getaxe == True:
             self.currentstage14()
         else: 
