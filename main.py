@@ -266,7 +266,7 @@ class Gamesys():
         objectbar.updateimage(1, 0, 0, 360, 800)
 
 
-        self.mousefollowbg =  pygame.transform.scale(pygame.image.load('objects/cursor/background.png'),(200,100))
+        self.mousefollowbg =  pygame.transform.scale(pygame.image.load('objects/cursor/background.png'),(175,50))
 
         self.diarypage = 1
         self.dukeroomlock = True
@@ -618,6 +618,7 @@ class Gamesys():
         print(textbar.alpha)
         updatelist.append(txtdis)
         print('currentstage11')
+        self.ending()
         self.currentstage12()#debugging only"""
         self.currentstage13()
         self.execute('swapscene', 'swapmadamroom')
@@ -758,8 +759,9 @@ class Gamesys():
         
         self.waituntilmouserelease()
         if self.getaxe == True:
+            self.getaxe = 'None'
             self.currentstage14()
-        else: 
+        elif self.getaxe == False: 
             while True:
                 self.whilerepeat()
                 bg.detectmouse()
@@ -773,6 +775,7 @@ class Gamesys():
         while leaderroomdiarycover.click != True:
             self.whilerepeat()
         self.diary(leaderroomdiarycover)
+        self.ending()
             
     def diary(self, room):
         if room == madamroomdiarycover:
@@ -838,6 +841,52 @@ class Gamesys():
                 self.whilerepeat()
                 if self.mouseclick == True and dukeroomdiaryopen.hover == False: 
                     break
+            updatelist.remove(leaderroomdiaryopen)
+            updatelist.remove(diarypgdp)  
+    def wait(self, secs):
+        waitsecs = float(secs)
+        for i in range(secs * 30):
+            self.whilerepeat()
+    def ending(self):
+        endingupdate = background()
+        for i in range(10):
+            for deleteing in updatelist:
+                updatelist.remove(deleteing)
+        print(updatelist)
+        updatelist.append(endingupdate)
+        endingupdate.alpha = 0
+        screen.fill((0,0,0))
+        self.whilerepeat()
+        pygame.display.update()
+        for i in range(7):
+            endingupdate.updateimage(i + 18, 0,0,1920,1080)
+            endingupdate.alpha = 0
+            for i in range(25):
+                endingupdate.alpha += 25
+                screen.fill((0,0,0))
+                self.eventupdate()
+                self.update()
+                pygame.display.update()
+            self.wait(3)
+            for i in range(25):
+                endingupdate.alpha -= 25
+                screen.fill((0,0,0))
+                self.eventupdate()
+                self.update()
+                pygame.display.update()
+        endingupdate.updateimage(2,0,0,1920,1080)
+        for i in range(25):
+            endingupdate.alpha += 25
+            screen.fill((0,0,0))
+            self.eventupdate()
+            self.update()
+            pygame.display.update()
+        while True:
+            system.whilerepeat()
+
+
+
+        
 
 
 
