@@ -23,3 +23,4 @@ backgrounds/ending/4.jpg
 backgrounds/ending/5.jpg
 backgrounds/ending/6.jpg
 backgrounds/ending/7.jpg
+backgrounds/ending/tobecontinued.jpg

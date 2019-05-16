@@ -911,6 +911,8 @@ class Gamesys():
                 if i.click == True:
                     if i == dukestudyaxe and self.getaxe == False:
                         self.getaxe = True
+                        self.objectbaraxe = objects(30,30,20,82,150)  
+                        updatelist.append(self.objectbaraxe)  
                     print('True')
                     i.respond()
 
@@ -1014,7 +1016,12 @@ class Gamesys():
             for deleteing in updatelist:
                 updatelist.remove(deleteing)
         print(updatelist)
+        tobecontinued = background()
+        print(updatelist)
+        tobecontinued.updateimage(25,1500,800,400,280)
+        tobecontinued.alpha = 255
         updatelist.append(endingupdate)
+        updatelist.append(tobecontinued)
         endingupdate.alpha = 0
         screen.fill((0,0,0))
         self.whilerepeat()
