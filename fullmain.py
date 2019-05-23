@@ -369,7 +369,6 @@ class Gamesys():
 
         if self.menushow == 1:
             self.menu()
-        self.mousefollow()
     def fadeout(self):
         for fadeoutobjects in fadelist:
             fadeoutobjects.fadeout()
