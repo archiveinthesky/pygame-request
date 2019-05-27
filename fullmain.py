@@ -29,9 +29,9 @@ screenmode = 1
 textfont = pygame.font.Font("texts/brushpen.ttc", 40)
 
 
-'''pygame.mixer.init()
+pygame.mixer.init()
 pygame.mixer.music.load('bgm.mp3')
-pygame.mixer.music.play()'''
+pygame.mixer.music.play()
 class background(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
