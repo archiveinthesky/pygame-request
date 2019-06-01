@@ -353,12 +353,6 @@ class Gamesys():
         self.menufullscreen = False
         self.mouseclick = False
 
-    def currentstagedetect(self):
-        if self.currentstage == '00':
-            updatelist.append(bg)
-            updatelist.append(startgame)
-            fadelist.append(bg)
-            fadelist.append(startgame)
 
     def update(self):
         screen.fill((0, 0, 0))
