@@ -102,9 +102,7 @@ class diarypagedisplay(pygame.sprite.Sprite):
 
         if room == 'madamroom':
             for i in range(6):
-                pic = pygame.image.load('backgrounds/diarytext/' + str(i+1) + '.png')
-
-              
+                pic = pygame.image.load('backgrounds/diarytext/' + str(i+1) + '.png')              
                 self.currentdiaryroom.append(pygame.transform.scale(pic, (1000, 1000*pic.get_rect().size[1]//pic.get_rect().size[0])))
         elif room == 'dukeroom':
             pic = pygame.image.load('backgrounds/diarytext/dukediary.png' )
@@ -236,6 +234,7 @@ class Gamesys():
 
     def eventupdate(self):
         screenctrl.controls.eventupdate(updatelist)
+        self.mouseclick = commonvar.bridge.getvar('mouseclick')
 
     def whilerepeat(self):
         clock.tick(60)
@@ -485,6 +484,7 @@ class Gamesys():
                     while self.mouseclick != False:
                         self.whilerepeat()
                     diarypgdp.updatepage(self.diarypage)
+                    time.sleep(0.2)
                 elif diaryleftarrow.click == True:
                     if self.diarypage == 0:
                         self.diarypage = 5
@@ -494,6 +494,7 @@ class Gamesys():
                     while self.mouseclick != False:
                         self.whilerepeat()
                     diarypgdp.updatepage(self.diarypage)
+                    time.sleep(0.2)
                 if self.mouseclick == True and madamroomdiaryopen.hover == False: 
                     break
             
@@ -802,8 +803,6 @@ class Stage1():
         global leadericon
         leadericon = classes.objects(0, 800, 21, 80, 45)
         dukestudyicon.assign('swapleaderroom')
-
-
         updatelist.append(leadericon)
         currentdisplaybuttons.append(leadericon)
         system.execute('swapscene', 'swapleaderroom')
