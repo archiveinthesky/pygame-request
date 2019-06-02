@@ -195,6 +195,7 @@ class enterpassclass(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.enterpress = False
+        self.close = objects(1691,3,24,91,141)
         self.entered = ''
         self.enterkey = ''
         self.numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -203,12 +204,26 @@ class enterpassclass(pygame.sprite.Sprite):
         self.enterpress = False
         self.entered = ''
         self.enterkey = ''
-        while self.enterpress == False:
+        updatelist.append(self.close)
+        while self.enterpress == False and self.close.click == False:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     self.check(event.key)
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    system.mouseclick = True
+                else:
+                    system.mouseclick = False
             system.whilerepeat()
+            print(str(self.close.hover) + ' hover')
+            print(self.close.click)
+            if self.close.hover == True:
+                print('yes')
+            print(system.mouseclick)
         updatelist.remove(enterpass)
+        updatelist.remove(self.close)
         if self.entered == str(anwser):
             return 'pass'
         else:
@@ -384,6 +399,7 @@ class Gamesys():
 
 
     def menu(self):
+        
         if self.menufullscreen == False and menufullscreencheckbox.click == True:
             menufullscreencheckbox.click = False
             self.menufullscreen = True
@@ -455,6 +471,7 @@ class Gamesys():
                                 
 
         self.update()
+        self.mousefollow()
         pygame.display.update()
 
 
@@ -915,8 +932,9 @@ class Stage1():
         print('Entering Escape')
         txtdis.load(1)
         bg.updateimage(9, 0, 0, 0, 0)
-        updatelist.remove(textbar)
-        updatelist.remove(txtdis)
+        """updatelist.remove(textbar)
+        updatelist.remove(txtdis)"""
+        updatelist.append(bg)
         for i in range(25):
             screen.fill((0, 0, 0))
             bg.alpha = bg.alpha + i * 25.5
@@ -1003,8 +1021,8 @@ class Stage1():
 
 
 system = Gamesys()
-stage0 = Stage0()
-stage0.currentstage00()
+#stage0 = Stage0()
+#stage0.currentstage00()
 stage1 = Stage1()
 stage1.currentstage10()
 clock.tick(60)

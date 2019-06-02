@@ -22,3 +22,4 @@ objects/scene1/axe.png
 objects/scene1/orphangeleadericon.png
 objects/scene1/diary/browncover.png
 objects/scene1/diary/brownopen.png
+objects/unlcokclose.png
