@@ -7,6 +7,12 @@ global screen, txtdis
 screen = commonvar.bridge.getvar('screen')
 txtdis =commonvar.bridge.getvar('txtdis')
 
+bgread = open('background.txt', 'r')
+bgtxt = bgread.read().splitlines()
+bgs = []
+for bgobt in bgtxt:
+    bgs.append(pygame.image.load(bgobt))
+
 obread = open('objects.txt', 'r')
 obtxt = obread.read().splitlines()
 obs = []
@@ -31,6 +37,48 @@ class Simplefunctions():
         pygame.display.update()
 
 sf = Simplefunctions()
+class background(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = bgs[0].convert()
+        self.image.set_alpha(255)
+        self.image.set_colorkey(pygame.Color(255, 255, 255))
+        self.rect = self.image.get_rect()
+        self.bgno = 2
+        self.alpha = 255
+        self.responses = [1, 1]
+
+    def update(self):
+        self.image.set_alpha(self.alpha)
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+
+    def updateimage(self, currentbgno, blitx, blity, resizex, resizey):
+        self.bgno = currentbgno
+        if resizex == 0 and resizey == 0:
+            self.image = bgs[self.bgno].convert()
+        else:
+            self.image = pygame.transform.scale(bgs[self.bgno], (resizex, resizey)).convert()
+        self.alpha = 0
+        self.image.set_colorkey(pygame.Color(0, 0, 0))
+        self.rect = self.image.get_rect()
+        self.rect.x = blitx
+        self.rect.y = blity
+
+    def detectmouse(self):
+        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
+            self.hover = True
+        else:
+            self.hover = False
+
+    def fadeout(self):
+        self.alpha = self.alpha - 10
+        self.update()
+
+    def fadein(self):
+        self.alpha = self.alpha + 10
+        self.update()
+
+
 class objects(pygame.sprite.Sprite):
     def __init__(self, x, y, image, resizex, resizey):
         pygame.sprite.Sprite.__init__(self)

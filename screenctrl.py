@@ -2,6 +2,20 @@ import pygame
 
 import commonvar
 pygame.init()
+class Simplefunctions():
+    def __init__(self):
+        self.mouseclick = False
+    def waituntilmouserelease(self):
+        while commonvar.bridge.getvar('mouseclick') == True:
+            self.whilerepeat()
+        while commonvar.bridge.getvar('mouseclick') == False:
+            self.whilerepeat()
+    def whilerepeat(self):
+        controls.eventupdate(commonvar.bridge.getvar('updatelist'))
+        for updateitem in commonvar.bridge.getvar('updatelist'):
+            updateitem.update()
+        pygame.display.update()
+sf = Simplefunctions()
 class Controls():
     def __init__(self):
         self.screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
@@ -36,6 +50,7 @@ class Controls():
                             updatelist.append(menufullscreencheck)
                         self.menu(updatelist)
                         self.menushow = 1
+                        self.menu(updatelist)
                     elif self.menushow == 1:
                         self.menushow = 0
                         updatelist.remove(menu)
@@ -49,21 +64,20 @@ class Controls():
                 pygame.quit()
                 exit()
     def menu(self, updatelist):
-        
-        if self.menufullscreen == False and menufullscreencheckbox.click == True:
-            menufullscreencheckbox.click = False
-            self.menufullscreen = True
-            menufullscreencheckbox.click = False
-            self.fullscreen(updatelist)
+        while self.menushow == 1:
+            sf.whilerepeat()
+            if self.menufullscreen == False and menufullscreencheckbox.click == True:
+                self.menufullscreen = True
+                self.fullscreen(updatelist)
 
-        if self.menufullscreen == True and menufullscreencheck.click == True:
-            menufullscreencheck.click = False
-            self.menufullscreen = False
-            self.resizeable(updatelist)
-            menufullscreencheck.click = False
-        if menuleavegame.click == True:
-            pygame.quit()
-            exit()
+            if self.menufullscreen == True and menufullscreencheck.click == True:
+                menufullscreencheck.click = False
+                self.menufullscreen = False
+                self.resizeable(updatelist)
+                menufullscreencheck.click = False
+            if menuleavegame.click == True:
+                pygame.quit()
+                exit()
     
     def fullscreen(self, updatelist):
         menufullscreencheckbox.click = False

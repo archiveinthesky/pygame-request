@@ -11,14 +11,6 @@ pygame.font.init()
 clock = pygame.time.Clock()
 clock.tick(60)
 
-bgread = open('background.txt', 'r')
-bgtxt = bgread.read().splitlines()
-bgs = []
-for bgobt in bgtxt:
-    bgs.append(pygame.image.load(bgobt))
-
-
-
 
 bgno = 0
 screenmode = 1
@@ -29,50 +21,9 @@ screen = commonvar.bridge.getvar('screen')
 pygame.mixer.init()
 pygame.mixer.music.load('bgm.mp3')
 pygame.mixer.music.play()
-class background(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = bgs[0].convert()
-        self.image.set_alpha(255)
-        self.image.set_colorkey(pygame.Color(255, 255, 255))
-        self.rect = self.image.get_rect()
-        self.bgno = 2
-        self.alpha = 255
-        self.responses = [1, 1]
-
-    def update(self):
-        self.image.set_alpha(self.alpha)
-        screen.blit(self.image, (self.rect.x, self.rect.y))
-
-    def updateimage(self, currentbgno, blitx, blity, resizex, resizey):
-        self.bgno = currentbgno
-        if resizex == 0 and resizey == 0:
-            self.image = bgs[self.bgno].convert()
-        else:
-            self.image = pygame.transform.scale(bgs[self.bgno], (resizex, resizey)).convert()
-        self.alpha = 0
-        self.image.set_colorkey(pygame.Color(0, 0, 0))
-        self.rect = self.image.get_rect()
-        self.rect.x = blitx
-        self.rect.y = blity
-
-    def detectmouse(self):
-        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
-            self.hover = True
-        else:
-            self.hover = False
-
-    def fadeout(self):
-        self.alpha = self.alpha - 10
-        self.update()
-
-    def fadein(self):
-        self.alpha = self.alpha + 10
-        self.update()
 
 
-
-bg = background()
+bg = classes.background()
 bg.updateimage(2, 0, 0, 0, 0)
 bg.alpha = 255
 
@@ -177,10 +128,10 @@ class Gamesys():
         global madamroomicon, dukeroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen, dukeroomobjects, dukeroomdiarycover, dukeroomdiaryopen, dukeroomlockobjects #stage1
         global dukestudylockobjects, dukestudyobjects, dukestudyaxe, leaderroomobjects, leaderroomdiarycover, leaderroomdiaryopen
         self.currentdisplayscene =[]
-        textbar = background()
+        textbar = classes.background()
         textbar.updateimage(0, 0, 840, 1920, 250)
 
-        objectbar = background()
+        objectbar = classes.background()
         objectbar.updateimage(1, 0, 0, 360, 800)
 
 
@@ -583,12 +534,12 @@ class Gamesys():
         for i in range(secs * 30):
             self.whilerepeat()
     def ending(self):
-        endingupdate = background()
+        endingupdate = classes.background()
         for i in range(10):
             for deleteing in updatelist:
                 updatelist.remove(deleteing)
         print(updatelist)
-        tobecontinued = background()
+        tobecontinued = classes.background()
         print(updatelist)
         tobecontinued.updateimage(25,1500,800,400,280)
         tobecontinued.alpha = 255
@@ -769,9 +720,10 @@ class Stage1():
         print('Entering Escape')
         txtdis.load(1)
         bg.updateimage(9, 0, 0, 0, 0)
-        """updatelist.remove(textbar)
-        updatelist.remove(txtdis)"""
-        updatelist.append(bg)
+        #"""
+        updatelist.remove(textbar)
+        updatelist.remove(txtdis)#"""
+        #updatelist.append(bg)
         for i in range(25):
             screen.fill((0, 0, 0))
             bg.alpha = bg.alpha + i * 25.5
@@ -858,8 +810,8 @@ class Stage1():
 
 
 system = Gamesys()
-#stage0 = Stage0()
-#stage0.currentstage00()
+stage0 = Stage0()
+stage0.currentstage00()
 stage1 = Stage1()
 stage1.currentstage10()
 clock.tick(60)
