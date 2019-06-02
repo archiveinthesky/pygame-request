@@ -4,39 +4,31 @@ import screenctrl
 import classes
 import commonvar
 
-
 pygame.init()
 pygame.font.init()
 
 clock = pygame.time.Clock()
 clock.tick(60)
 
-
 bgno = 0
 screenmode = 1
 screen = commonvar.bridge.getvar('screen')
-
-
 
 pygame.mixer.init()
 pygame.mixer.music.load('bgm.mp3')
 pygame.mixer.music.play()
 
-
 bg = classes.background()
 bg.updateimage(2, 0, 0, 0, 0)
 bg.alpha = 255
-
 
 startgame = classes.objects(300, 650, 0, 510, 202)
 startgame.alpha = 255
 
 txtdis = commonvar.bridge.getvar('txtdis')
 
-
 txtdis.load(0)
 txtdis.renew(0)
-
 class enterpassclass(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -50,6 +42,7 @@ class enterpassclass(pygame.sprite.Sprite):
         self.enterpress = False
         self.entered = ''
         self.enterkey = ''
+        self.close.click = False
         updatelist.append(self.close)
         while self.enterpress == False and self.close.click == False:
             for event in pygame.event.get():
@@ -60,13 +53,12 @@ class enterpassclass(pygame.sprite.Sprite):
                     exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     system.mouseclick = True
+                    commonvar.bridge.updatevar('mouseclick', True)
                 else:
                     system.mouseclick = False
+                    commonvar.bridge.updatevar('mouseclick', False)
             system.whilerepeat()
-            print(str(self.close.hover) + ' hover')
-            print(self.close.click)
-            if self.close.hover == True:
-                print('yes')
+
             print(system.mouseclick)
         updatelist.remove(enterpass)
         updatelist.remove(self.close)
@@ -92,7 +84,6 @@ class enterpassclass(pygame.sprite.Sprite):
         elif key == 8:
             self.entered = self.entered[:len(self.enterkey)-1]
         self.entered = str(self.entered) + str(self.enterkey)
-
 enterpass = enterpassclass()
 class diarypagedisplay(pygame.sprite.Sprite):
     def __init__(self):

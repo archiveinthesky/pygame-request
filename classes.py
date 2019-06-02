@@ -171,5 +171,7 @@ class textdisplay(pygame.sprite.Sprite):
     def simplerender(self, x, y, r, g, b, text):
         screen.blit(textfont.render(str(text), False, (r, g, b)), (x, y))
 
+
 txtdis = textdisplay()
 commonvar.bridge.setvar('txtdis', txtdis)
+
