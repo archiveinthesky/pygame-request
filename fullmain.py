@@ -29,11 +29,52 @@ screenmode = 1
 textfont = pygame.font.Font("texts/brushpen.ttc", 40)
 
 
-pygame.mixer.init()
+"""pygame.mixer.init()
 pygame.mixer.music.load('bgm.mp3')
-pygame.mixer.music.play()
+pygame.mixer.music.play()"""
 
-bg = classes.background()
+class background(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = bgs[0].convert()
+        self.image.set_alpha(255)
+        self.image.set_colorkey(pygame.Color(255, 255, 255))
+        self.rect = self.image.get_rect()
+        self.bgno = 2
+        self.alpha = 255
+        self.responses = [1, 1]
+
+    def update(self):
+        self.image.set_alpha(self.alpha)
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+
+    def updateimage(self, currentbgno, blitx, blity, resizex, resizey):
+        self.bgno = currentbgno
+        if resizex == 0 and resizey == 0:
+            self.image = bgs[self.bgno].convert()
+        else:
+            self.image = pygame.transform.scale(bgs[self.bgno], (resizex, resizey)).convert()
+        self.alpha = 0
+        self.image.set_colorkey(pygame.Color(0, 0, 0))
+        self.rect = self.image.get_rect()
+        self.rect.x = blitx
+        self.rect.y = blity
+
+    def detectmouse(self):
+        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
+            self.hover = True
+        else:
+            self.hover = False
+
+    def fadeout(self):
+        self.alpha = self.alpha - 10
+        self.update()
+
+    def fadein(self):
+        self.alpha = self.alpha + 10
+        self.update()
+
+bg = background()
 bg.updateimage(2, 0, 0, 0, 0)
 bg.alpha = 255
 
@@ -54,6 +95,8 @@ class objects(pygame.sprite.Sprite):
         self.assignment = False
         self.responses = [1, 1]
         self.hover = False
+        self.password = 'none'
+        self.room = ''
     def detectmouse(self):#''''''
         if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
             self.hover = True
@@ -76,7 +119,9 @@ class objects(pygame.sprite.Sprite):
             self.click = True
         else:
             self.click = False
-
+    def setpass(self, password, room):
+        self.password = password
+        self.room = room
     def fadeout(self):
         self.alpha = self.alpha - 10
         self.update()
@@ -90,6 +135,14 @@ class objects(pygame.sprite.Sprite):
         self.responses = [responcestart, responceend]
     def respond(self):  
         txtdis.dpmultiline(self.responses[0], self.responses[1])
+        if self.password != 'none':
+            self.passresult = system.execute('enterpass', '123')
+            if self.passresult == True:
+                txtdis.dpmultiline(30,30)
+            else:
+                txtdis.dpmultiline(9,9)
+        system.execute('swapscene', self.room)
+        
 startgame = objects(300, 650, 0, 510, 202)
 objs.append(startgame)
 startgame.alpha = 255
@@ -161,6 +214,7 @@ class enterpassclass(pygame.sprite.Sprite):
         self.entered = ''
         self.enterkey = ''
         self.close.click = False
+        updatelist.append(enterpass)
         updatelist.append(self.close)
         while self.enterpress == False and self.close.click == False:
             for event in pygame.event.get():
@@ -171,10 +225,8 @@ class enterpassclass(pygame.sprite.Sprite):
                     exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     system.mouseclick = True
-                    commonvar.bridge.updatevar('mouseclick', True)
                 else:
                     system.mouseclick = False
-                    commonvar.bridge.updatevar('mouseclick', False)
             system.whilerepeat()
 
             print(system.mouseclick)
@@ -185,7 +237,7 @@ class enterpassclass(pygame.sprite.Sprite):
         else:
             return 'notpass'
         
-        pass
+        
     def update(self):
         txtdis.simplerender(1000, 700, 255, 255, 255, self.entered)
     def check(self, key):
@@ -203,7 +255,6 @@ class enterpassclass(pygame.sprite.Sprite):
             self.entered = self.entered[:len(self.enterkey)-1]
         self.entered = str(self.entered) + str(self.enterkey)
 enterpass = enterpassclass()
-commonvar.bridge.setvar('enterpass',enterpass)
 class diarypagedisplay(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -236,10 +287,10 @@ class Gamesys():
         global madamroomicon, dukeroomicon, woodendooricon, madambox, madamlockbox1, madamlockbox2, madamroomobjects , woodendoorobjects, madamroomdiarycover, madamroomdiaryopen, dukeroomobjects, dukeroomdiarycover, dukeroomdiaryopen, dukeroomlockobjects #stage1
         global dukestudylockobjects, dukestudyobjects, dukestudyaxe, leaderroomobjects, leaderroomdiarycover, leaderroomdiaryopen
         self.currentdisplayscene =[]
-        textbar = classes.background()
+        textbar = background()
         textbar.updateimage(0, 0, 840, 1920, 250)
 
-        objectbar = classes.background()
+        objectbar = background()
         objectbar.updateimage(1, 0, 0, 360, 800)
 
 
@@ -283,13 +334,17 @@ class Gamesys():
         dukeroomdiarycover = objects(1200, 450, 13, 100, 170)
         dukeroomdiaryopen = objects(400, 50, 18, 1300, 800)
         dukeroomobjects.append(dukeroomdiarycover)
+        
         #madamroom stuff
         madambox = objects(850, 400, 7, 300, 300)
         madambox.assignrespond(2, 2)
+        madambox.setpass('brownkey == True', 'swapmadamroom')
         madamlockbox1 = objects(1550, 430, 8, 90, 45)
         madamlockbox1.assignrespond(3, 3)
+        madamlockbox1.setpass('max', 'swapmadamroom')
         madamlockbox2 = objects(1750, 430, 9, 90, 45)
         madamlockbox2.assignrespond(4, 4)
+        madamlockbox2.setpass('823', 'swapmadamroom')
         madamroomdiarycover = objects(900, 300, 12, 100, 170)
         madamroomdiaryopen = objects(400, 50, 14, 1300, 800)
         madamroomobjects = []
@@ -496,7 +551,7 @@ class Gamesys():
             bg.updateimage(11, 352, 0, 1568, 840)
             bg.alpha = 255
             self.currentdisplayscene = enterpasslist
-            updatelist.append(enterpass)
+            
             if enterpass.unlock(mission) == 'pass':
                 return(True)
             else:
@@ -701,12 +756,12 @@ class Gamesys():
         for i in range(secs * 30):
             self.whilerepeat()
     def ending(self):
-        endingupdate = classes.background()
+        endingupdate = background()
         for i in range(10):
             for deleteing in updatelist:
                 updatelist.remove(deleteing)
         print(updatelist)
-        tobecontinued = classes.background()
+        tobecontinued = background()
         print(updatelist)
         tobecontinued.updateimage(25,1500,800,400,280)
         tobecontinued.alpha = 255
@@ -887,10 +942,9 @@ class Stage1():
         print('Entering Escape')
         txtdis.load(1)
         bg.updateimage(9, 0, 0, 0, 0)
-        #"""
-        updatelist.remove(textbar)
-        updatelist.remove(txtdis)#"""
-        #updatelist.append(bg)
+        """updatelist.remove(textbar)
+        updatelist.remove(txtdis)"""
+        updatelist.append(bg)
         for i in range(25):
             screen.fill((0, 0, 0))
             bg.alpha = bg.alpha + i * 25.5
@@ -975,8 +1029,8 @@ class Stage1():
 
 
 system = Gamesys()
-stage0 = Stage0()
-stage0.currentstage00()
+#stage0 = Stage0()
+#stage0.currentstage00()
 stage1 = Stage1()
 stage1.currentstage10()
 clock.tick(60)
