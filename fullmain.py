@@ -249,7 +249,6 @@ class Gamesys():
                                 
 
         self.update()
-        self.mousefollow()
         pygame.display.update()
 
 
