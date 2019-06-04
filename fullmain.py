@@ -29,62 +29,9 @@ txtdis = commonvar.bridge.getvar('txtdis')
 
 txtdis.load(0)
 txtdis.renew(0)
-class enterpassclass(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.enterpress = False
-        self.close = classes.objects(1691,3,24,91,141)
-        self.entered = ''
-        self.enterkey = ''
-        self.numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        self.letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-    def unlock(self, anwser):
-        self.enterpress = False
-        self.entered = ''
-        self.enterkey = ''
-        self.close.click = False
-        updatelist.append(self.close)
-        while self.enterpress == False and self.close.click == False:
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    self.check(event.key)
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    system.mouseclick = True
-                    commonvar.bridge.updatevar('mouseclick', True)
-                else:
-                    system.mouseclick = False
-                    commonvar.bridge.updatevar('mouseclick', False)
-            system.whilerepeat()
 
-            print(system.mouseclick)
-        updatelist.remove(enterpass)
-        updatelist.remove(self.close)
-        if self.entered == str(anwser):
-            return 'pass'
-        else:
-            return 'notpass'
-        
-        pass
-    def update(self):
-        txtdis.simplerender(1000, 700, 255, 255, 255, self.entered)
-    def check(self, key):
-        self.enterkey = ''
-        if key == 13 or key == 271:
-            print('enter')
-            self.enterpress = True
-        elif key >=48 and key <= 57:
-            self.enterkey = self.numbers[key-48]
-        elif key >=256 and key <= 265:
-            self.enterkey = self.numbers[key-256]
-        elif key >= 97 and key <= 122:
-            self.enterkey = self.letters[key-97]
-        elif key == 8:
-            self.entered = self.entered[:len(self.enterkey)-1]
-        self.entered = str(self.entered) + str(self.enterkey)
-enterpass = enterpassclass()
+
+enterpass = classes.enterpassclass()
 commonvar.bridge.setvar('enterpass',enterpass)
 class diarypagedisplay(pygame.sprite.Sprite):
     def __init__(self):
@@ -149,7 +96,7 @@ class Gamesys():
         enterpasslist = []
         leaderroomobjects = []
 
-
+        #icons
         madamroomicon = classes.objects(0, 800, 5, 80, 45)
         dukeroomicon = classes.objects(80, 800, 17, 80, 45)
         woodendooricon = classes.objects(160, 800, 6, 80, 45)
@@ -165,9 +112,11 @@ class Gamesys():
         dukeroomdiarycover = classes.objects(1200, 450, 13, 100, 170)
         dukeroomdiaryopen = classes.objects(400, 50, 18, 1300, 800)
         dukeroomobjects.append(dukeroomdiarycover)
+        
         #madamroom stuff
         madambox = classes.objects(850, 400, 7, 300, 300)
         madambox.assignrespond(2, 2)
+        madambox.setpass(123)
         madamlockbox1 = classes.objects(1550, 430, 8, 90, 45)
         madamlockbox1.assignrespond(3, 3)
         madamlockbox2 = classes.objects(1750, 430, 9, 90, 45)
@@ -321,7 +270,7 @@ class Gamesys():
             bg.updateimage(11, 352, 0, 1568, 840)
             bg.alpha = 255
             self.currentdisplayscene = enterpasslist
-            updatelist.append(enterpass)
+            
             if enterpass.unlock(mission) == 'pass':
                 return(True)
             else:
@@ -712,10 +661,9 @@ class Stage1():
         print('Entering Escape')
         txtdis.load(1)
         bg.updateimage(9, 0, 0, 0, 0)
-        #"""
-        updatelist.remove(textbar)
-        updatelist.remove(txtdis)#"""
-        #updatelist.append(bg)
+        """updatelist.remove(textbar)
+        updatelist.remove(txtdis)"""
+        updatelist.append(bg)
         for i in range(25):
             screen.fill((0, 0, 0))
             bg.alpha = bg.alpha + i * 25.5
@@ -800,8 +748,8 @@ class Stage1():
 
 
 system = Gamesys()
-stage0 = Stage0()
-stage0.currentstage00()
+#stage0 = Stage0()
+#stage0.currentstage00()
 stage1 = Stage1()
 stage1.currentstage10()
 clock.tick(60)
