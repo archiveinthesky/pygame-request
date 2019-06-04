@@ -85,6 +85,7 @@ class enterpassclass(pygame.sprite.Sprite):
             self.entered = self.entered[:len(self.enterkey)-1]
         self.entered = str(self.entered) + str(self.enterkey)
 enterpass = enterpassclass()
+commonvar.bridge.setvar('enterpass',enterpass)
 class diarypagedisplay(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)

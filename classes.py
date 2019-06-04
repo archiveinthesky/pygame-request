@@ -96,6 +96,7 @@ class objects(pygame.sprite.Sprite):
         self.assignment = False
         self.responses = [1, 1]
         self.hover = False
+        self.pass = 'none'
         
     def detectmouse(self):#''''''
         if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
@@ -119,6 +120,9 @@ class objects(pygame.sprite.Sprite):
             self.click = True
         else:
             self.click = False
+
+    def setpass(self, pass):
+        self.unlock = commonvar.bridge.getvar('enterpass')
 
     def fadeout(self):
         self.alpha = self.alpha - 10
