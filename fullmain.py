@@ -1,8 +1,5 @@
 import pygame
 import time
-import screenctrl
-import classes
-import commonvar
 
 pygame.init()
 pygame.font.init()
@@ -10,9 +7,27 @@ pygame.font.init()
 clock = pygame.time.Clock()
 clock.tick(60)
 
+bgread = open('background.txt', 'r')
+bgtxt = bgread.read().splitlines()
+bgs = []
+for bgobt in bgtxt:
+    bgs.append(pygame.image.load(bgobt))
+obread = open('objects.txt', 'r')
+obtxt = obread.read().splitlines()
+obs = []
+objs = []
+for obt in obtxt:
+    obs.append(pygame.image.load(obt))
+
+
+
 bgno = 0
+screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
+pygame.display.set_caption('Request')
 screenmode = 1
-screen = commonvar.bridge.getvar('screen')
+
+textfont = pygame.font.Font("texts/brushpen.ttc", 40)
+
 
 pygame.mixer.init()
 pygame.mixer.music.load('bgm.mp3')
@@ -22,10 +37,113 @@ bg = classes.background()
 bg.updateimage(2, 0, 0, 0, 0)
 bg.alpha = 255
 
-startgame = classes.objects(300, 650, 0, 510, 202)
+class objects(pygame.sprite.Sprite):
+    def __init__(self, x, y, image, resizex, resizey):
+        pygame.sprite.Sprite.__init__(self)
+        if resizex == 0 and resizey == 0:
+            self.image = obs[image].convert()
+        else:
+            self.image = pygame.transform.scale(obs[image], (resizex, resizey)).convert()
+        self.image.set_alpha(0)
+        self.image.set_colorkey(pygame.Color(0, 0, 0))
+        self.alpha = 255
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.click = False
+        self.assignment = False
+        self.responses = [1, 1]
+        self.hover = False
+    def detectmouse(self):#''''''
+        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
+            self.hover = True
+        else:
+            self.hover = False
+        if self.rect.collidepoint(pygame.mouse.get_pos()) and system.mouseclick == True:
+            self.click = True
+        else:
+            self.click = False
+    def update(self):
+        self.detectmouse()
+        self.image.set_alpha(self.alpha)
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+
+        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
+            self.hover = True
+        else:
+            self.hover = False
+        if self.rect.collidepoint(pygame.mouse.get_pos()) and system.mouseclick == True:
+            self.click = True
+        else:
+            self.click = False
+
+    def fadeout(self):
+        self.alpha = self.alpha - 10
+        self.update()
+
+    def fadein(self):
+        self.alpha = self.alpha + 10
+        self.update()
+    def assign(self, mission):
+        self.assignment = mission
+    def assignrespond(self, responcestart, responceend):
+        self.responses = [responcestart, responceend]
+    def respond(self):  
+        txtdis.dpmultiline(self.responses[0], self.responses[1])
+startgame = objects(300, 650, 0, 510, 202)
+objs.append(startgame)
 startgame.alpha = 255
 
-txtdis = commonvar.bridge.getvar('txtdis')
+menu = objects(550, 150, 1, 766, 887)
+menufullscreencheck = objects(1010, 455, 2, 100, 80)
+menufullscreencheckbox = objects(1010, 455, 3, 80, 80)
+
+
+menuleavegame = objects(730, 550, 4, 450, 180)
+
+
+
+
+class textdisplay(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.txtarray= []
+        self.passwordmode = False
+        self.lines = 1
+        self.currentdisplayline = 1
+    def load(self, doc):
+        scriptread = open('texts/stage' + str(doc) + 'text.txt', 'r', encoding = 'utf8')
+        global script
+        script = scriptread.read().splitlines()
+    
+    
+    def dpmultiline(self, responcestart, responceend):
+        self.lines = (responceend - responcestart) + 1
+        for i in range(self.lines):
+            txtdis.renew(i + responcestart)
+            system.waituntilmouserelease()
+        txtdis.renew(1)
+
+    def renew(self, line):
+        self.txtarray = []
+        self.line = script[line]
+        self.current = 1
+        self.goal = len(self.line)
+    
+    def update(self):
+        if self.current == self.goal:
+            screen.blit(textfont.render(self.line, False, (150, 0, 0)), (0, 850))
+
+        else:
+            self.current = self.current + 1
+            screen.blit(textfont.render(self.line[:self.current], False, (150, 0, 0)), (0, 850))
+
+    def simplerender(self, x, y, r, g, b, text):
+        screen.blit(textfont.render(str(text), False, (r, g, b)), (x, y))
+
+
+
+txtdis = textdisplay()
 
 txtdis.load(0)
 txtdis.renew(0)
@@ -33,7 +151,7 @@ class enterpassclass(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.enterpress = False
-        self.close = classes.objects(1691,3,24,91,141)
+        self.close = objects(1691,3,24,91,141)
         self.entered = ''
         self.enterkey = ''
         self.numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -135,7 +253,7 @@ class Gamesys():
         self.currentstage = '00'
 
         updatelist = []
-        commonvar.bridge.setvar('updatelist', updatelist)
+
         fadelist = []
 
         currentdisplayscenes = []
@@ -150,9 +268,9 @@ class Gamesys():
         leaderroomobjects = []
 
 
-        madamroomicon = classes.objects(0, 800, 5, 80, 45)
-        dukeroomicon = classes.objects(80, 800, 17, 80, 45)
-        woodendooricon = classes.objects(160, 800, 6, 80, 45)
+        madamroomicon = objects(0, 800, 5, 80, 45)
+        dukeroomicon = objects(80, 800, 17, 80, 45)
+        woodendooricon = objects(160, 800, 6, 80, 45)
         madamroomicon.assign('swapmadamroom')
         dukeroomicon.assign('swapdukeroom')
         woodendooricon.assign('swapwoodendoor')
@@ -162,34 +280,34 @@ class Gamesys():
 
 
         #dukeroomstuff
-        dukeroomdiarycover = classes.objects(1200, 450, 13, 100, 170)
-        dukeroomdiaryopen = classes.objects(400, 50, 18, 1300, 800)
+        dukeroomdiarycover = objects(1200, 450, 13, 100, 170)
+        dukeroomdiaryopen = objects(400, 50, 18, 1300, 800)
         dukeroomobjects.append(dukeroomdiarycover)
         #madamroom stuff
-        madambox = classes.objects(850, 400, 7, 300, 300)
+        madambox = objects(850, 400, 7, 300, 300)
         madambox.assignrespond(2, 2)
-        madamlockbox1 = classes.objects(1550, 430, 8, 90, 45)
+        madamlockbox1 = objects(1550, 430, 8, 90, 45)
         madamlockbox1.assignrespond(3, 3)
-        madamlockbox2 = classes.objects(1750, 430, 9, 90, 45)
+        madamlockbox2 = objects(1750, 430, 9, 90, 45)
         madamlockbox2.assignrespond(4, 4)
-        madamroomdiarycover = classes.objects(900, 300, 12, 100, 170)
-        madamroomdiaryopen = classes.objects(400, 50, 14, 1300, 800)
+        madamroomdiarycover = objects(900, 300, 12, 100, 170)
+        madamroomdiaryopen = objects(400, 50, 14, 1300, 800)
         madamroomobjects = []
         madamroomobjects.append(madambox)
         madamroomobjects.append(madamlockbox1)
         madamroomobjects.append(madamlockbox2)
         madamroomobjects.append(madamroomdiarycover)
         #dukestudystuff
-        dukestudyaxe = classes.objects(1006,518,20,82,150)        
+        dukestudyaxe = objects(1006,518,20,82,150)        
         dukestudyobjects.append(dukestudyaxe)
         dukestudyaxe.assignrespond(29,29)
 
-        leaderroomdiarycover = classes.objects(733, 475, 22, 100, 170)
-        leaderroomdiaryopen = classes.objects(400, 50, 23, 1300, 800)
+        leaderroomdiarycover = objects(733, 475, 22, 100, 170)
+        leaderroomdiaryopen = objects(400, 50, 23, 1300, 800)
         leaderroomobjects.append(leaderroomdiarycover)
 
-        diaryleftarrow = classes.objects(400, 700, 15, 200, 150)
-        diaryrightarrow = classes.objects(1500, 700, 16, 200, 150)
+        diaryleftarrow = objects(400, 700, 15, 200, 150)
+        diaryrightarrow = objects(1500, 700, 16, 200, 150)
 
 
         diaries = []
@@ -209,10 +327,10 @@ class Gamesys():
         screen.fill((0, 0, 0))
         for updateobjects in updatelist:
             updateobjects.update()
-        commonvar.bridge.updatevar('updatelist', updatelist)
+
 
         if self.menushow == 1:
-            screenctrl.controls.menu(updatelist)
+            self.menu()
     def fadeout(self):
         for fadeoutobjects in fadelist:
             fadeoutobjects.fadeout()
@@ -222,11 +340,68 @@ class Gamesys():
             fadeinobjects.fadein()
 
 
+    def fullscreen(self):
+        menufullscreencheckbox.click = False
+        updatelist.remove(menufullscreencheckbox)
+        updatelist.append(menufullscreencheck)
+        screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
+    def resizeable(self):
+        menufullscreencheckbox.click = False
+        updatelist.remove(menufullscreencheck)
+        updatelist.append(menufullscreencheckbox)
+        screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
 
+
+    def menu(self):
+        
+        if self.menufullscreen == False and menufullscreencheckbox.click == True:
+            menufullscreencheckbox.click = False
+            self.menufullscreen = True
+            menufullscreencheckbox.click = False
+            self.fullscreen()
+
+        if self.menufullscreen == True and menufullscreencheck.click == True:
+            menufullscreencheck.click = False
+            self.menufullscreen = False
+            self.resizeable()
+            menufullscreencheck.click = False
+            time.sleep(0.2)
+        if menuleavegame.click == True:
+            pygame.quit()
+            exit()
 
     def eventupdate(self):
-        screenctrl.controls.eventupdate(updatelist)
-        self.mouseclick = commonvar.bridge.getvar('mouseclick')
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.mouseclick = True
+            else:
+                self.mouseclick = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    print('Escape')
+                    if self.menushow == 0:
+                        updatelist.append(menu)
+                        updatelist.append(menuleavegame)
+                        if self.menufullscreen == False:
+                            updatelist.append(menufullscreencheckbox)
+                        elif self.menufullscreen == True:
+                            updatelist.append(menufullscreencheck)
+                        self.menu()
+                        self.menushow = 1
+                    elif self.menushow == 1:
+                        self.menushow = 0
+                        updatelist.remove(menu)
+                        updatelist.remove(menuleavegame)
+                        if self.menufullscreen == False:
+                            updatelist.remove(menufullscreencheckbox)
+                        elif self.menufullscreen == True:
+                            updatelist.remove(menufullscreencheck)
+                        self.whilerepeat()
+
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
 
     def whilerepeat(self):
         clock.tick(60)
@@ -337,9 +512,9 @@ class Gamesys():
 
     def waituntilmouserelease(self):
         time.sleep(0.2)
-        while commonvar.bridge.getvar('mouseclick') == True:
+        while self.mouseclick == True:
             self.whilerepeat()
-        while commonvar.bridge.getvar('mouseclick') == False:
+        while self.mouseclick == False:
             self.whilerepeat()
         
     def mousefollow(self):
@@ -421,7 +596,7 @@ class Gamesys():
                 if i.click == True:
                     if i == dukestudyaxe and self.getaxe == False:
                         self.getaxe = True
-                        self.objectbaraxe = classes.objects(30,30,20,82,150)  
+                        self.objectbaraxe = objects(30,30,20,82,150)  
                         updatelist.append(self.objectbaraxe)
                         updatelist.remove(dukestudyaxe)
                         
@@ -768,7 +943,7 @@ class Stage1():
         system.currentstage = '12'
         system.dukeroomlock = False
         global dukestudyicon
-        dukestudyicon = classes.objects(240, 800, 19, 80, 45)
+        dukestudyicon = objects(240, 800, 19, 80, 45)
         dukestudyicon.assign('swapdukestudy')
         updatelist.append(dukestudyicon)
         currentdisplaybuttons.append(dukestudyicon)
@@ -792,7 +967,7 @@ class Stage1():
         updatelist.remove(woodendooricon)
         txtdis.dpmultiline(14,28)
         global leadericon
-        leadericon = classes.objects(0, 800, 21, 80, 45)
+        leadericon = objects(0, 800, 21, 80, 45)
         dukestudyicon.assign('swapleaderroom')
         updatelist.append(leadericon)
         currentdisplaybuttons.append(leadericon)
