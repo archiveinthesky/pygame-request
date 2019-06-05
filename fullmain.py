@@ -97,6 +97,8 @@ class objects(pygame.sprite.Sprite):
         self.hover = False
         self.password = 'none'
         self.room = ''
+        self.unlockcon = 'none'
+        self.lock = False
     def detectmouse(self):#''''''
         if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
             self.hover = True
@@ -119,9 +121,13 @@ class objects(pygame.sprite.Sprite):
             self.click = True
         else:
             self.click = False
-    def setpass(self, password, room):
-        self.password = password
+    def setunlock(self, mode, phrase, room):
+        if mode == 'con':
+            self.unlockcon = phrase
+        else:
+            self.password = phrase
         self.room = room
+        self.lock = True
     def fadeout(self):
         self.alpha = self.alpha - 10
         self.update()
@@ -135,13 +141,20 @@ class objects(pygame.sprite.Sprite):
         self.responses = [responcestart, responceend]
     def respond(self):  
         txtdis.dpmultiline(self.responses[0], self.responses[1])
-        if self.password != 'none':
-            self.passresult = system.execute('enterpass', '123')
-            if self.passresult == True:
-                txtdis.dpmultiline(30,30)
-            else:
-                txtdis.dpmultiline(9,9)
-        system.execute('swapscene', self.room)
+        if self.lock == True:
+            if self.password != 'none':
+                if self.lock == True:
+                    if system.execute('enterpass', '123') == True:
+                        txtdis.dpmultiline(30,30)
+                        self.lock = False
+                    else:
+                        txtdis.dpmultiline(9,9)
+            system.execute('swapscene', self.room)
+            if self.unlockcon != 'none':
+                if self.unlockcon == True:
+                    pass
+                else:
+                    pass
         
 startgame = objects(300, 650, 0, 510, 202)
 objs.append(startgame)
@@ -154,8 +167,17 @@ menufullscreencheckbox = objects(1010, 455, 3, 80, 80)
 
 menuleavegame = objects(730, 550, 4, 450, 180)
 
-
-
+class touchbox(pygame.sprite.Sprite):
+    def __init__(self, x,y,sizex, sizey, responce):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(obs[image], (resizex, resizey))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.click = False
+            
+    def update(self):
+        pass
 
 class textdisplay(pygame.sprite.Sprite):
     def __init__(self):
@@ -338,13 +360,13 @@ class Gamesys():
         #madamroom stuff
         madambox = objects(850, 400, 7, 300, 300)
         madambox.assignrespond(2, 2)
-        madambox.setpass('brownkey == True', 'swapmadamroom')
+        madambox.setunlock('con','brownkey == True', 'swapmadamroom')
         madamlockbox1 = objects(1550, 430, 8, 90, 45)
         madamlockbox1.assignrespond(3, 3)
-        madamlockbox1.setpass('max', 'swapmadamroom')
+        madamlockbox1.setunlock('pass','max', 'swapmadamroom')
         madamlockbox2 = objects(1750, 430, 9, 90, 45)
         madamlockbox2.assignrespond(4, 4)
-        madamlockbox2.setpass('823', 'swapmadamroom')
+        madamlockbox2.setunlock('pass','823', 'swapmadamroom')
         madamroomdiarycover = objects(900, 300, 12, 100, 170)
         madamroomdiaryopen = objects(400, 50, 14, 1300, 800)
         madamroomobjects = []
