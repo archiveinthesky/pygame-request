@@ -20,7 +20,7 @@ objs = []
 for obt in obtxt:
     obs.append(pygame.image.load(obt))
 
-textfont = pygame.font.Font("texts/brushpen.ttc", 40)
+textfont = pygame.font.Font("texts/brushpen.TTC", 40)
 
 class Simplefunctions():
     def __init__(self):
@@ -96,8 +96,8 @@ class objects(pygame.sprite.Sprite):
         self.assignment = False
         self.responses = [1, 1]
         self.hover = False
-        self.pass = 'none'
-        
+        self.password = 'none'
+
     def detectmouse(self):#''''''
         if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
             self.hover = True
@@ -121,7 +121,7 @@ class objects(pygame.sprite.Sprite):
         else:
             self.click = False
 
-    def setpass(self, pass):
+    def setpass(self, password):
         self.unlock = commonvar.bridge.getvar('enterpass')
 
     def fadeout(self):
@@ -135,7 +135,7 @@ class objects(pygame.sprite.Sprite):
         self.assignment = mission
     def assignrespond(self, responcestart, responceend):
         self.responses = [responcestart, responceend]
-    def respond(self):  
+    def respond(self):
         txtdis.dpmultiline(self.responses[0], self.responses[1])
 
 class textdisplay(pygame.sprite.Sprite):
@@ -149,8 +149,8 @@ class textdisplay(pygame.sprite.Sprite):
         scriptread = open('texts/stage' + str(doc) + 'text.txt', 'r', encoding = 'utf8')
         global script
         script = scriptread.read().splitlines()
-    
-    
+
+
     def dpmultiline(self, responcestart, responceend):
         self.lines = (responceend - responcestart) + 1
         for i in range(self.lines):
@@ -163,7 +163,7 @@ class textdisplay(pygame.sprite.Sprite):
         self.line = script[line]
         self.current = 1
         self.goal = len(self.line)
-    
+
     def update(self):
         if self.current == self.goal:
             screen.blit(textfont.render(self.line, False, (150, 0, 0)), (0, 850))
@@ -178,4 +178,3 @@ class textdisplay(pygame.sprite.Sprite):
 
 txtdis = textdisplay()
 commonvar.bridge.setvar('txtdis', txtdis)
-
