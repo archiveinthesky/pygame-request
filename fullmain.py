@@ -63,6 +63,7 @@ class enterpassclass(pygame.sprite.Sprite):
             print(system.mouseclick)
         updatelist.remove(enterpass)
         updatelist.remove(self.close)
+
         if self.entered == str(anwser) and self.close.click != True:
             return 'pass'
         else:
@@ -713,9 +714,9 @@ class Stage1():
         print('Entering Escape')
         txtdis.load(1)
         bg.updateimage(9, 0, 0, 0, 0)
-        """
+
         updatelist.remove(textbar)
-        updatelist.remove(txtdis)"""
+        updatelist.remove(txtdis)
         updatelist.append(bg)
         for i in range(25):
             screen.fill((0, 0, 0))
@@ -801,8 +802,8 @@ class Stage1():
 
 
 system = Gamesys()
-#stage0 = Stage0()
-#stage0.currentstage00()
+stage0 = Stage0()
+stage0.currentstage00()
 stage1 = Stage1()
 stage1.currentstage10()
 clock.tick(60)
