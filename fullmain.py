@@ -112,15 +112,6 @@ class objects(pygame.sprite.Sprite):
         self.detectmouse()
         self.image.set_alpha(self.alpha)
         screen.blit(self.image, (self.rect.x, self.rect.y))
-
-        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
-            self.hover = True
-        else:
-            self.hover = False
-        if self.rect.collidepoint(pygame.mouse.get_pos()) and system.mouseclick == True:
-            self.click = True
-        else:
-            self.click = False
     def setunlock(self, mode, phrase, room):
         if mode == 'con':
             self.unlockcon = phrase
@@ -143,7 +134,7 @@ class objects(pygame.sprite.Sprite):
         txtdis.dpmultiline(self.responses[0], self.responses[1])
         if self.lock == True:
             if self.password != 'none':
-                if self.lock == True:
+                if self.lock:
                     if system.execute('enterpass', '123') == True:
                         txtdis.dpmultiline(30,30)
                         self.lock = False
@@ -170,14 +161,40 @@ menuleavegame = objects(730, 550, 4, 450, 180)
 class touchbox(pygame.sprite.Sprite):
     def __init__(self, x,y,sizex, sizey, responce):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(obs[image], (resizex, resizey))
+        self.image = pygame.transform.scale(obs[25], (sizex, sizey))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.click = False
-            
+        self.responce = responce
+    
+    def detectmouse(self):
+        if self.rect.collidepoint(pygame.mouse.get_pos()) == True:
+            self.hover = True
+        else:
+            self.hover = False
+        if self.hover and system.mouseclick:
+            self.click = True
+        else:
+            self.click = False
     def update(self):
-        pass
+        self.detectmouse()
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+
+    def respond(self):
+        for respondarray in self.responce:
+            if respondarray[0] == 'txtdis':
+                txtdis.dpmultiline(respondarray[1], respondarray[2])
+            elif respondarray[0] == 'unlock':
+                if self.lock:
+                    if enterpass.unlock(respondarray[1]):
+                         txtdis.dpmultiline(respondarray[2][0], respondarray[2][1])
+                    else:
+                        txtdis.dpmultiline(9,9)
+                        break
+
+                else:
+                    txtdis.dpmultiline(respondarray[2][0], respondarray[2][1])
 
 class textdisplay(pygame.sprite.Sprite):
     def __init__(self):
