@@ -5,7 +5,7 @@ pygame.init()
 
 global screen, txtdis
 screen = commonvar.bridge.getvar('screen')
-txtdis =commonvar.bridge.getvar('txtdis')
+txtdis = commonvar.bridge.getvar('txtdis')
 
 bgread = open('background.txt', 'r')
 bgtxt = bgread.read().splitlines()

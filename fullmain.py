@@ -60,7 +60,7 @@ class enterpassclass(pygame.sprite.Sprite):
             system.update()
             pygame.display.update()
 
-            print(system.mouseclick)
+            #print(system.mouseclick)
         updatelist.remove(enterpass)
         updatelist.remove(self.close)
 
@@ -75,7 +75,7 @@ class enterpassclass(pygame.sprite.Sprite):
     def check(self, key):
         self.enterkey = ''
         if key == 13 or key == 271:
-            print('enter')
+            #print('enter')
             self.enterpress = True
         elif key >=48 and key <= 57:
             self.enterkey = self.numbers[key-48]
@@ -105,7 +105,7 @@ class diarypagedisplay(pygame.sprite.Sprite):
             pic = pygame.image.load('backgrounds/diarytext/leadderroom.png' )
             self.currentdiaryroom.append((pygame.transform.scale(pic, (1000, 1000*pic.get_rect().size[1]//pic.get_rect().size[0]))))
     def updatepage(self, pagenum):
-        print('length' + str(len(self.currentdiaryroom)))
+        #print('length' + str(len(self.currentdiaryroom)))
         self.image = self.currentdiaryroom[pagenum-1]
     def update(self):
         screen.blit(self.image, (550, 200))
@@ -244,10 +244,10 @@ class Gamesys():
 
         for currentdiaries in diaries:
             if currentdiaries.click == True:
-                print('diaries')
-                print(currentdiaries.click)
+                #print('diaries')
+                #print(currentdiaries.click)
                 currentdiaries.click = False
-                print(currentdiaries.click)
+                #print(currentdiaries.click)
                 self.diary(currentdiaries)
 
 
@@ -260,7 +260,7 @@ class Gamesys():
             while self.mouseclick != False:
                 self.whilerepeat()
             for i in self.currentdisplayscene:
-                print(i)
+                #print(i)
                 updatelist.remove(i)
             if mission == 'swapmadamroom':
                 bg.updateimage(10, 352, 0, 1568, 840)
@@ -350,7 +350,7 @@ class Gamesys():
 
 
     def madamroom(self):
-        print('madamroom')
+        #print('madamroom')
         while True:
             self.whilerepeat()
 
@@ -358,10 +358,10 @@ class Gamesys():
                 break
             for i in madamroomobjects:
                 if i.click == True:
-                    print('True')
+                    #print('True')
                     i.respond()
 
-                    #print('false respond')
+                    ##print('false respond')
     def dukeroomlocked(self):
 
         while True:
@@ -390,7 +390,7 @@ class Gamesys():
                 break
             for i in dukeroomobjects:
                 if i.click == True:
-                    print('True')
+                    #print('True')
                     i.respond()
 
     def dukestudylocked(self):
@@ -428,7 +428,7 @@ class Gamesys():
                         updatelist.remove(dukestudyaxe)
 
                         dukestudyobjects.remove(dukestudyaxe)
-                    print('True')
+                    #print('True')
                     i.respond()
 
 
@@ -473,7 +473,7 @@ class Gamesys():
                         self.diarypage = 0
                     else:
                         self.diarypage = self.diarypage + 1
-                    print(self.diarypage)
+                    #print(self.diarypage)
                     while self.mouseclick != False:
                         self.whilerepeat()
                     diarypgdp.updatepage(self.diarypage)
@@ -483,7 +483,7 @@ class Gamesys():
                         self.diarypage = 5
                     else:
                         self.diarypage = self.diarypage - 1
-                    print(self.diarypage)
+                    #print(self.diarypage)
                     while self.mouseclick != False:
                         self.whilerepeat()
                     diarypgdp.updatepage(self.diarypage)
@@ -532,9 +532,9 @@ class Gamesys():
         for i in range(10):
             for deleteing in updatelist:
                 updatelist.remove(deleteing)
-        print(updatelist)
+        #print(updatelist)
         tobecontinued = classes.background()
-        print(updatelist)
+        #print(updatelist)
         tobecontinued.updateimage(25,1500,800,400,280)
         tobecontinued.alpha = 255
         updatelist.append(endingupdate)
@@ -580,7 +580,7 @@ class Stage0():
     def currentstage00(self):
         bg.updateimage(2,0,0,1920,1080)
         bg.alpha = 255
-        print(updatelist)
+        #print(updatelist)
         while startgame.click == False:
             system.whilerepeat()
         startgame.click = False
@@ -599,7 +599,7 @@ class Stage0():
             screen.fill((0, 0, 0))
             system.fadein()
             pygame.display.update()
-        print(bg.alpha)
+        #print(bg.alpha)
         system.waituntilmouserelease()
         for i in range(30):
             screen.fill((0, 0, 0))
@@ -627,7 +627,7 @@ class Stage0():
         txtdis.renew(1)
         time.sleep(0.2)
         system.waituntilmouserelease()
-        print('continue')
+        #print('continue')
         bg.updateimage(5,0,0,0,0)
         for i in range(30):
             screen.fill((0,0,0))
@@ -711,7 +711,7 @@ class Stage1():
     def __init__(self):
         pass
     def currentstage10(self):
-        print('Entering Escape')
+        #print('Entering Escape')
         txtdis.load(1)
         bg.updateimage(9, 0, 0, 0, 0)
 
@@ -737,7 +737,7 @@ class Stage1():
         txtdis.load(1)
         txtdis.renew(1)
 
-        print('currentstage10')
+        #print('currentstage10')
         self.currentstage11()
 
     def currentstage11(self):
@@ -759,10 +759,10 @@ class Stage1():
 
         for i in system.currentdisplayscene:
             updatelist.append(i)
-        print(updatelist)
-        print(textbar.alpha)
+        #print(updatelist)
+        #print(textbar.alpha)
         updatelist.append(txtdis)
-        print('currentstage11')
+        #print('currentstage11')
         system.execute('swapscene', 'swapmadamroom')
 
     def currentstage12(self):

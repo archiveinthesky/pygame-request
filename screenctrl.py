@@ -20,6 +20,8 @@ class Controls():
     def __init__(self):
         self.screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
         pygame.display.set_caption('Request')
+        self.screen.blit(pygame.transform.scale(pygame.image.load('backgrounds/loading.png'), (1920, 1080)),(0,0))
+        pygame.display.update()
         commonvar.bridge.setvar('screen',self.screen)
         commonvar.bridge.setvar('mouseclick', False)
         import classes
